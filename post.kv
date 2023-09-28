@@ -1,0 +1,63 @@
+MDFloatLayout:
+    md_bg_color: 0.996, 0.365, 0.149, 1  # Orange color in RGBA format
+
+    MDFloatLayout:
+        Label:
+            id: post_label
+            text_size: self.size
+            align: "center"
+            valign: "middle"
+            font_size: 22
+            pos_hint: {"center_x": .6, "center_y": .8}
+    MDFloatLayout:
+        size_hint: .9, .2
+        pos_hint: {"center_x": .5, "center_y": .5}
+        canvas:
+            Color:
+                rgb: 250/255, 250/255, 250/255, 1 #1st box background color
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                radius: [4]
+        canvas.before:
+            Color:
+                rgb: 217/255, 217/255, 217/255, 1 #border color
+            Line:
+                width:1.1 #border width
+                rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+        TextInput:
+            id: post_input
+            hint_text: "Share your story around the Bonfire"
+            multiline: True
+            size_hint: 1, None
+            pos_hint: {"center_x": .5, "center_y": .78}
+            height: self.minimum_height
+            background_color: 1, 1, 1, 0
+            font_size: "14sp"
+            #add font here#
+            hint_text_color: 170/255, 170/255, 170/255, 1
+            padding:13
+            cursor_color: 0,0,0,1
+
+    MDFloatLayout:
+        MDRaisedButton:
+            pos_hint: {"center_x": .5, "center_y": .35}
+            size: (1, .5)
+            font_size: 32
+            #md_bg_color: 0.996, 0.365, 0.149
+            md_bg_color: (255/255, 235/255, 228/255)
+            text_color: (58/255,18/255, 7/255)
+            text: "Add Story"
+            on_press: app.submit()
+            #spacing: 50
+        MDRaisedButton:
+            pos_hint: {"center_x": .5, "center_y": .1}
+            size: (1, .5)
+            font_size: 32
+            #text_color: (255/255, 235/255, 228/255)
+            text_color: (58/255,18/255, 7/255)
+            text: "View All Bonfire Stories"
+            #md_bg_color: 0.996, 0.365, 0.149 #Orange
+            md_bg_color: (255/255, 235/255, 228/255)
+            #md_bg_color: (58/255,18/255, 7/255)
+            on_press: app.show_posts()
