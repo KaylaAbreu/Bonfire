@@ -25,7 +25,6 @@ class LoginScreen(Screen):
 
         if self.check_credentials(username, password):
             # Successful login, navigate to the next screen
-            self.current_user = username
             self.manager.current = 'SuccessScreen'
         else:
             # Invalid login, display an error message
@@ -37,6 +36,9 @@ class LoginScreen(Screen):
         values = (username, password)
         app.cursor.execute(query, values)
         result = app.cursor.fetchone()
+        if result:
+            self.user_ID = result[0]
+            self.current_user = username
         return result is not None
 
 
@@ -152,10 +154,11 @@ class AddMtPostScreen(Screen):
         c = db_connect.cursor()
 
         username = self.manager.get_screen('LoginScreen').current_user
+        user_ID = self.manager.get_screen('LoginScreen').user_ID
 
         # Add record to database
-        sql_command = "INSERT INTO posts (username, content, location) VALUES (%s, %s, 'mountain')"
-        values = (username, self.ids.post_input.text,)
+        sql_command = "INSERT INTO posts (user_ID, username, content, location) VALUES (%s, %s, %s, 'mountain')"
+        values = (user_ID, username, self.ids.post_input.text,)
 
         # Execute command
         c.execute(sql_command, values)
@@ -189,10 +192,11 @@ class AddPtPostScreen(Screen):
         # Create cursor
         c = db_connect.cursor()
         username = self.manager.get_screen('LoginScreen').current_user
+        user_ID = self.manager.get_screen('LoginScreen').user_ID
 
         # Add record to database
-        sql_command = "INSERT INTO posts (username, content, location) VALUES (%s, %s, 'piedmont')"
-        values = (username, self.ids.post_input.text,)
+        sql_command = "INSERT INTO posts (user_ID, username, content, location) VALUES (%s, %s, %s, 'piedmont')"
+        values = (user_ID, username, self.ids.post_input.text,)
 
         # Execute command
         c.execute(sql_command, values)
@@ -226,10 +230,11 @@ class AddCtPostScreen(Screen):
         # Create cursor
         c = db_connect.cursor()
         username = self.manager.get_screen('LoginScreen').current_user
+        user_ID = self.manager.get_screen('LoginScreen').user_ID
 
         # Add record to database
-        sql_command = "INSERT INTO posts (username, content, location) VALUES (%s, %s, 'coast')"
-        values = (username, self.ids.post_input.text,)
+        sql_command = "INSERT INTO posts (user_ID, username, content, location) VALUES (%s, %s, %s, 'coast')"
+        values = (user_ID, username, self.ids.post_input.text,)
 
         # Execute command
         c.execute(sql_command, values)
