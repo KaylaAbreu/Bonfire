@@ -53,7 +53,7 @@ class ForgotPasswordScreen(Screen):
 # Create a ScreenManager to manage the screens
 class Bonfire(MDApp):
 
-    database= mysql.connector.Connect(host="localhost",user="root",password ="admin321", database="bonfire")
+    database= mysql.connector.Connect(host="localhost",user="root",password ="", database="bonfire")
     cursor = database.cursor()
     cursor.execute("select * from login")
     for i in cursor.fetchall():
@@ -204,7 +204,7 @@ ScreenManager:
                     size: self.size
                     pos: self.pos
                     radius: [4]
-    
+        
 <SignupScreen>:
     name: 'signup'
     MDFloatLayout:

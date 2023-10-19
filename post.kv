@@ -1,63 +1,643 @@
-MDFloatLayout:
-    md_bg_color: 0.996, 0.365, 0.149, 1  # Orange color in RGBA format
+<LoginScreen>:
+    MDFloatLayout:
+        md_bg_color: 0.996, 0.365, 0.149, 1  # Orange color in RGBA format
+        Image:
+            source: "logo.png"
+            pos_hint: {"center_x": .5, "center_y": .70}
+            size_hint: .5, .5
 
-    MDFloatLayout:
-        Label:
-            id: post_label
-            text_size: self.size
-            align: "center"
-            valign: "middle"
-            font_size: 22
-            pos_hint: {"center_x": .6, "center_y": .8}
-    MDFloatLayout:
-        size_hint: .9, .2
-        pos_hint: {"center_x": .5, "center_y": .5}
-        canvas:
-            Color:
-                rgb: 250/255, 250/255, 250/255, 1 #1st box background color
-            RoundedRectangle:
-                size: self.size
-                pos: self.pos
-                radius: [4]
-        canvas.before:
-            Color:
-                rgb: 217/255, 217/255, 217/255, 1 #border color
-            Line:
-                width:1.1 #border width
-                rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
-        TextInput:
-            id: post_input
-            hint_text: "Share your story around the Bonfire"
-            multiline: True
-            size_hint: 1, None
-            pos_hint: {"center_x": .5, "center_y": .78}
-            height: self.minimum_height
-            background_color: 1, 1, 1, 0
-            font_size: "14sp"
-            #add font here#
-            hint_text_color: 170/255, 170/255, 170/255, 1
-            padding:13
-            cursor_color: 0,0,0,1
+        MDFloatLayout:
+            size_hint: .9 , .07
+            pos_hint: {"center_x": .5, "center_y": .50}
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [4]
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1
+                Line:
+                    width:1.1
+                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+            TextInput:
+                id: username
+                hint_text: "Username"
+                size_hint: 1, None
+                pos_hint: {"center_x": .5, "center_y": .5}
+                height: self.minimum_height
+                background_color: 1, 1, 1, 0
+                font_size: "14sp"
+                hint_text_color: 170/255, 170/255, 170/255, 1
+                padding: 13
+                cursor_color: 0, 0, 0, 1
 
+        MDFloatLayout:
+            size_hint: .9 , .07
+            pos_hint: {"center_x": .5, "center_y": .41}
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [4]
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1
+                Line:
+                    width:1.1
+                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+            TextInput:
+                id: password
+                hint_text: "Password"
+                size_hint: 1, None
+                pos_hint: {"center_x": .5, "center_y": .5}
+                height: self.minimum_height
+                background_color: 1, 1, 1, 0
+                font_size: "14sp"
+                password: True
+                hint_text_color: 170/255, 170/255, 170/255, 1
+                padding: 13
+                cursor_color: 0, 0, 0, 1
+
+            Button:
+                text: "Login"
+                size_hint: 1, 0.9
+                pos_hint: {"center_x": 0.5, "center_y": -0.70}
+                background_color: 128/255, 128/255, 128/255, 1
+                font_size: "15sp"
+                on_release:
+                    root.on_login(username,password)
+                canvas.before:
+                    Color:
+                        rgb: 154/255, 203/255, 247/255, 1
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+                        radius: [4]
+            MDTextButton:
+                text: "Sign Up"
+                pos_hint:{"center_x":0.5, "center_y": -4.0}
+                font_size: "13sp"
+                on_release:
+                    root.manager.transition.direction = 'left'
+                    root.manager.current = 'SignupScreen'
+
+            MDTextButton:
+                text: "Forgot Password"
+                pos_hint:{"center_x":0.5, "center_y": -4.6}
+                font_size: "13sp"
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = 'ForgotPasswordScreen'
+
+<SignupScreen>:
     MDFloatLayout:
+        md_bg_color: 0.996, 0.365, 0.149, 1  # Orange color in RGBA format
+        Image:
+            source: "logo.png"
+            pos_hint: {"center_x": .5, "center_y": .70}
+            size_hint: .5, .5
+
+        MDFloatLayout:
+            size_hint: .9 , .07
+            pos_hint: {"center_x": .5, "center_y": .50}
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [4]
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1
+                Line:
+                    width:1.1
+                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+            TextInput:
+                id:username
+                hint_text: "New Username"
+                size_hint: 1, None
+                pos_hint: {"center_x": .5, "center_y": .5}
+                height: self.minimum_height
+                background_color: 1, 1, 1, 0
+                font_size: "14sp"
+                hint_text_color: 170/255, 170/255, 170/255, 1
+                padding: 13
+                cursor_color: 0, 0, 0, 1
+
+        MDFloatLayout:
+            size_hint: .9 , .07
+            pos_hint: {"center_x": .5, "center_y": .41}
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [4]
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1
+                Line:
+                    width:1.1
+                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+            TextInput:
+                id:password
+                hint_text: "New Password"
+                size_hint: 1, None
+                pos_hint: {"center_x": .5, "center_y": .5}
+                height: self.minimum_height
+                background_color: 1, 1, 1, 0
+                font_size: "14sp"
+                password: True
+                hint_text_color: 170/255, 170/255, 170/255, 1
+                padding: 13
+                cursor_color: 0, 0, 0, 1
+
+            Button:
+                text: "Create Account"
+                size_hint: 1, 0.9
+                pos_hint: {"center_x": 0.5, "center_y": -0.70}
+                background_color: 128/255, 128/255, 128/255, 1
+                on_release: app.send_data(username,password)
+                font_size: "15sp"
+                canvas.before:
+                    Color:
+                        rgb: 154/255, 203/255, 247/255, 1
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+                        radius: [4]
+            MDTextButton:
+                text: "Back To Login"
+                pos_hint:{"center_x":0.5, "center_y": -3.5}
+                font_size: "13sp"
+                on_release:
+                    root.manager.transition.direction = "right"
+                    root.manager.current = 'LoginScreen'
+<ForgotPasswordScreen>:
+    MDFloatLayout:
+        md_bg_color: 0.996, 0.365, 0.149, 1  # Orange color in RGBA format
+        Image:
+            source: "logo.png"
+            pos_hint: {"center_x": .5, "center_y": .70}
+            size_hint: .5, .5
+
+        MDFloatLayout:
+            size_hint: .9 , .07
+            pos_hint: {"center_x": .5, "center_y": .50}
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [4]
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1
+                Line:
+                    width:1.1
+                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+            TextInput:
+                hint_text: "Username"
+                size_hint: 1, None
+                pos_hint: {"center_x": .5, "center_y": .5}
+                height: self.minimum_height
+                background_color: 1, 1, 1, 0
+                font_size: "14sp"
+                hint_text_color: 170/255, 170/255, 170/255, 1
+                padding: 13
+                cursor_color: 0, 0, 0, 1
+
+        MDFloatLayout:
+            size_hint: .9 , .07
+            pos_hint: {"center_x": .5, "center_y": .41}
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [4]
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1
+                Line:
+                    width:1.1
+                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+            TextInput:
+                hint_text: "New Password"
+                size_hint: 1, None
+                pos_hint: {"center_x": .5, "center_y": .5}
+                height: self.minimum_height
+                background_color: 1, 1, 1, 0
+                font_size: "14sp"
+                password: True
+                hint_text_color: 170/255, 170/255, 170/255, 1
+                padding: 13
+                cursor_color: 0, 0, 0, 1
+
+            Button:
+                text: "Submit"
+                size_hint: 1, 0.9
+                pos_hint: {"center_x": 0.5, "center_y": -0.70}
+                background_color: 128/255, 128/255, 128/255, 1
+                font_size: "15sp"
+                canvas.before:
+                    Color:
+                        rgb: 154/255, 203/255, 247/255, 1
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+                        radius: [4]
+
+            MDTextButton:
+                text: "Back To Login"
+                pos_hint:{"center_x":0.5, "center_y": -3.5}
+                font_size: "13sp"
+                on_release:
+                    root.manager.transition.direction = "right"
+                    root.manager.current = "LoginScreen"
+<SuccessScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Welcome to the Bonfire"
+            anchor_title: "left"
+            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1
+
+            MDRaisedButton:
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                size_hint: .6, .07
+                pos_hint: {"center_x": .5, "center_y": .7}
+                text: "Mountain Bonfire"
+                text_color: 44/255, 44/255, 4/255, 1 #gray
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "ViewMtPostScreen"
+
+            MDRaisedButton:
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                size_hint: .6, .07
+                pos_hint: {"center_x": .5, "center_y": .5}
+                text: "Piedmont Bonfire"
+                text_color: 44/255, 44/255, 44/255, 1 #gray
+
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "ViewPtPostScreen"
+
+            MDRaisedButton:
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                size_hint: .6, .07
+                pos_hint: {"center_x": .5, "center_y": .3}
+                text: "Coastal Bonfire"
+                text_color: 44/255, 44/255, 44/255, 1 #gray
+
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "ViewCtPostScreen"
+
+            MDRaisedButton:
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                size_hint: .6, .07
+                pos_hint: {"center_x": .5, "center_y": .1}
+                text: "My Stories"
+                text_color: 44/255, 44/255, 44/255, 1
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "UserPostScreen"
+
+<ViewMtPostScreen>:
+    MDBoxLayout:
+        md_bg_color: 250/255, 237/255, 202/255, 1  # White color in RGBA format
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Mountain Bonfire"
+            anchor_title: "left"
+            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+
+
+        MDScrollView:
+            MDList:
+                id: mt_story_container
+
+        MDBottomAppBar:
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            MDTopAppBar:
+                title: "Share your story"
+                md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+                elevation: 1
+                type: "bottom"
+                icon: "plus"
+                icon_color: 243/255, 132/255, 68/255, 1 #
+                mode: "end"
+                specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+                on_action_button:
+                    root.manager.transition.direction = 'left'
+                    root.manager.current = "AddMtPostScreen"
+<AddMtPostScreen>:
+    MDBoxLayout:
+        #md_bg_color: 0.996, 0.365, 0.149, 1  # Orange color in RGBA format
+        md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Mountain Bonfire"
+            anchor_title: "left"
+            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 79/255, 1  # light Orange color in RGBA format
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            Label:
+                id: post_label
+                text_size: self.size
+                align: "center"
+                valign: "middle"
+                font_size: 22
+                pos_hint: {"center_x": .6, "center_y": .8}
+        MDFloatLayout:
+            size_hint: .9, .7
+            pos_hint: {"center_x": .5, "center_y": .8}
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1 #1st box background color
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [4]
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1 #border color
+                Line:
+                    width:1.1 #border width
+                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+            TextInput:
+                id: post_input
+                hint_text: "Share your story around the Bonfire"
+                multiline: True
+                size_hint: 1, None
+                pos_hint: {"center_x": .5, "center_y": .78}
+                height: self.minimum_height
+                background_color: 1, 1, 1, 0
+                font_size: "14sp"
+                hint_text_color: 170/255, 170/255, 170/255, 1
+                padding:13
+                cursor_color: 0,0,0,1
+            #MDLabel:
+            #    pos_hint: {"center_x": 1.1, "center_y": -.15}
+            #    text: "[ Upload photo ]"
+            #   font_size: 19
+        MDFloatLayout:
+            MDRaisedButton:
+                pos_hint: {"center_x": .5, "center_y": .45}
+                size: (1, .5)
+                font_size: 32
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                text_color: 44/255, 44/255, 44/255, 1 #gray
+                text: "Add Story"
+                on_press:
+                    root.mt_submit()
+<ViewPtPostScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 250/255, 237/255, 202/255, 1 #offwhite
+        MDTopAppBar:
+            title: "Piedmont Bonfire"
+            anchor_title: "left"
+            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+
+
+        MDScrollView:
+            MDList:
+                id: pt_story_container
+
+        MDBottomAppBar:
+            md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+            MDTopAppBar:
+                title: "Share your story"
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                elevation: 1
+                type: "bottom"
+                icon: "plus"
+                icon_color: 243/255, 132/255, 68/255, 1
+                mode: "end"
+                specific_text_color: 44/255, 44/255, 44/255, 1
+                on_action_button:
+                    root.manager.transition.direction = 'left'
+                    root.manager.current = "AddPtPostScreen"
+<AddPtPostScreen>:
+    MDBoxLayout:
+        md_bg_color: 250/255, 237/255, 202/255, 1 #off white
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Piedmont Bonfire"
+            anchor_title: "left"
+            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            Label:
+                id: post_label
+                text_size: self.size
+                align: "center"
+                valign: "middle"
+                font_size: 22
+                pos_hint: {"center_x": .6, "center_y": .8}
+        MDFloatLayout:
+            size_hint: .9, .7
+            pos_hint: {"center_x": .5, "center_y": .8}
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1 #1st box background color
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [4]
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1 #border color
+                Line:
+                    width:1.1 #border width
+                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+            TextInput:
+                id: post_input
+                hint_text: "Share your story around the Bonfire"
+                multiline: True
+                size_hint: 1, None
+                pos_hint: {"center_x": .5, "center_y": .78}
+                height: self.minimum_height
+                background_color: 1, 1, 1, 0
+                font_size: "14sp"
+                #add font here#
+                hint_text_color: 170/255, 170/255, 170/255, 1
+                padding:13
+                cursor_color: 0,0,0,1
+            #MDLabel:
+            #    pos_hint: {"center_x": 1.1, "center_y": -.15}
+            #    text: "[ Upload photo ]"
+            #   font_size: 19
+        MDFloatLayout:
+            MDRaisedButton:
+                pos_hint: {"center_x": .5, "center_y": .45}
+                size: (1, .5)
+                font_size: 32
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                text_color: 44/255, 44/255, 44/255, 1 #gray
+                text: "Add Story"
+                on_press:
+                    root.pt_submit()
+<ViewCtPostScreen>:
+    MDBoxLayout:
+        md_bg_color: 250/255, 237/255, 202/255, 1 #offwhite
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Coastal Bonfire"
+            anchor_title: "left"
+            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 79/255 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+
+        MDScrollView:
+            MDList:
+                id: ct_story_container
+
+        MDBottomAppBar:
+            md_bg_color: 248/255, 143/255, 79/255 #light orange
+            MDTopAppBar:
+                title: "Share your story"
+                md_bg_color: 248/255, 143/255, 79/255 #light orange
+                elevation: 1
+                type: "bottom"
+                icon: "plus"
+                #icon_color: "black"
+                icon_color: 243/255, 132/255, 68/255, 1
+                mode: "end"
+                specific_text_color: 44/255, 44/255, 44/255, 1
+                on_action_button:
+                    root.manager.transition.direction = 'left'
+                    root.manager.current = "AddCtPostScreen"
+<AddCtPostScreen>:
+    MDBoxLayout:
+        md_bg_color: 250/255, 237/255, 202/255, 1 #offwhite
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Coastal Bonfire"
+            anchor_title: "left"
+            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            Label:
+                id: post_label
+                text_size: self.size
+                align: "center"
+                valign: "middle"
+                font_size: 22
+                pos_hint: {"center_x": .6, "center_y": .8}
+        MDFloatLayout:
+            size_hint: .9, .7
+            pos_hint: {"center_x": .5, "center_y": .8}
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1 #1st box background color
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [4]
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1 #border color
+                Line:
+                    width:1.1 #border width
+                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+            TextInput:
+                id: post_input
+                hint_text: "Share your story around the Bonfire"
+                multiline: True
+                size_hint: 1, None
+                pos_hint: {"center_x": .5, "center_y": .78}
+                height: self.minimum_height
+                background_color: 1, 1, 1, 0
+                font_size: "14sp"
+                #add font here#
+                hint_text_color: 170/255, 170/255, 170/255, 1
+                padding:13
+                cursor_color: 0,0,0,1
+            #MDLabel:
+            #    pos_hint: {"center_x": 1.1, "center_y": -.15}
+            #    text: "[ Upload photo ]"
+            #   font_size: 19
+        MDFloatLayout:
+            MDRaisedButton:
+                pos_hint: {"center_x": .5, "center_y": .45}
+                size: (1, .5)
+                font_size: 32
+                #md_bg_color: 0.996, 0.365, 0.149
+                #md_bg_color: (255/255, 235/255, 228/255)
+                #md_bg_color: "black"
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                #text_color: 227/255, 71/255, 16/255, 1
+                text_color: 44/255, 44/255, 44/255, 1 #gray
+                text: "Add Story"
+                on_press:
+                    root.ct_submit()
+<UserPostScreen>:
+    MDBoxLayout:
+        md_bg_color: 250/255, 237/255, 202/255, 1  # White color in RGBA formatS
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "My Stories"
+            anchor_title: "left"
+            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            elevation: 1
+            #md_bg_color: "black"
+            md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+
+        MDScrollView:
+            MDList:
+                id: user_story_container
+
         MDRaisedButton:
-            pos_hint: {"center_x": .5, "center_y": .35}
+            pos_hint: {"center_x": .5, "center_y": .45}
             size: (1, .5)
             font_size: 32
             #md_bg_color: 0.996, 0.365, 0.149
-            md_bg_color: (255/255, 235/255, 228/255)
-            text_color: (58/255,18/255, 7/255)
-            text: "Add Story"
-            on_press: app.submit()
-            #spacing: 50
-        MDRaisedButton:
-            pos_hint: {"center_x": .5, "center_y": .1}
-            size: (1, .5)
-            font_size: 32
-            #text_color: (255/255, 235/255, 228/255)
-            text_color: (58/255,18/255, 7/255)
-            text: "View All Bonfire Stories"
-            #md_bg_color: 0.996, 0.365, 0.149 #Orange
-            md_bg_color: (255/255, 235/255, 228/255)
-            #md_bg_color: (58/255,18/255, 7/255)
-            on_press: app.show_posts()
+            #md_bg_color: (255/255, 235/255, 228/255)
+            #md_bg_color: "black"
+            md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+            #md_bg_color: 44/255, 44/255, 44/255, 1 #gray
+            #text_color: 227/255, 71/255, 16/255, 1
+            text_color: 44/255, 44/255, 44/255, 1
+            text: "Back"
+            on_press:
+                root.manager.transition.direction = "right"
+                root.manager.current = "SuccessScreen"
