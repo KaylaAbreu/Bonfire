@@ -1,0 +1,454 @@
+
+ScreenManager:
+    AllTips:
+    MountainTips:
+    PiedmontTips:
+    CoastTips:
+    AddTips:
+
+<AllTips>:
+    canvas.before:
+        Color:
+            rgba: 250/255, 237/255, 202/255, 1 #cream background color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    name: 'allTips'
+
+    Label:
+        id: tips_label
+        text: "Tips for Your Every Adventure"
+        font_size: "22sp"
+        pos_hint: {"center_x": .5, "center_y": .85}
+        color: (254/255, 93/255, 38/255) #darkest orange color
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .155, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "All Tips"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.all_tips()
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .385, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Mountain"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.mountainTips()
+    MDRaisedButton:
+        pos_hint: {"center_x": .63, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Piedmont"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.piedmontTips()
+    MDRaisedButton:
+        pos_hint: {"center_x": .85, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Coast"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.coastTips()
+
+
+
+<MountainTips>:
+    name: 'mountainTips'
+
+    canvas.before:
+        Color:
+            rgba: 250/255, 237/255, 202/255, 1 #cream background color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    Label:
+        id: tips_label
+        text: "Tips for Your Mountain Adventure"
+        font_size: "22sp"
+        pos_hint: {"center_x": .5, "center_y": .85}
+        color: (254/255, 93/255, 38/255) #dark orange color
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .155, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "All Tips"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.all_tips()
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .385, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Mountain"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.mountainTips()
+    MDRaisedButton:
+        pos_hint: {"center_x": .63, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Piedmont"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.piedmontTips()
+    MDRaisedButton:
+        pos_hint: {"center_x": .85, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Coast"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.coastTips()
+
+
+<PiedmontTips>:
+    name: 'piedmontTips'
+
+    canvas.before:
+        Color:
+            rgba: 250/255, 237/255, 202/255, 1 #cream background color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    Label:
+        id: tips_label
+        text: "Tips for Your Piedmont Adventure"
+        font_size: "22sp"
+        pos_hint: {"center_x": .5, "center_y": .85}
+        color: (254/255, 93/255, 38/255) #dark orange color
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .155, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "All Tips"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.all_tips()
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .385, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Mountain"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.mountainTips()
+    MDRaisedButton:
+        pos_hint: {"center_x": .63, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Piedmont"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.piedmontTips()
+    MDRaisedButton:
+        pos_hint: {"center_x": .85, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Coast"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.coastTips()
+
+<CoastTips>:
+    name: 'coastTips'
+
+    canvas.before:
+        Color:
+            rgba: 250/255, 237/255, 202/255, 1 #cream background color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    Label:
+        id: tips_label
+        text: "Tips for Your Coastal Adventure"
+        font_size: "22sp"
+        pos_hint: {"center_x": .5, "center_y": .85}
+        color: (254/255, 93/255, 38/255) #dark orange color
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .155, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "All Tips"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.all_tips()
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .385, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Mountain"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.mountainTips()
+    MDRaisedButton:
+        pos_hint: {"center_x": .63, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Piedmont"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.piedmontTips()
+    MDRaisedButton:
+        pos_hint: {"center_x": .85, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Coast"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.coastTips()
+
+<AddTips>:
+    name: 'addTips'
+
+    canvas.before:
+        Color:
+            rgba: 250/255, 237/255, 202/255, 1 #cream background color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    Label:
+        id: tips_label
+        text: "Add a New Tip for Your \n      Fellow Explorers"
+        multiline: True
+        font_size: "22sp"
+        pos_hint: {"center_x": .5, "center_y": .85}
+        color: (254/255, 93/255, 38/255) #dark orange color
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .155, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "All"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.all_tips()
+    MDRaisedButton:
+        pos_hint: {"center_x": .40, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Mountain"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.mountainTips()
+    MDRaisedButton:
+        pos_hint: {"center_x": .635, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Piedmont"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.piedmontTips()
+    MDRaisedButton:
+        pos_hint: {"center_x": .855, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Coast"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.coastTips()
+
+    MDFloatLayout:
+        size_hint: .9, .05
+        pos_hint: {"center_x": .5, "center_y": .64}
+        canvas:
+            Color:
+                rgb: 250/255, 237/255, 202/255, 1 #1st box background color (cream)
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                radius: [4]
+        canvas.before:
+            Color:
+                rgb: 254/255, 93/255, 38/255, 1 #border color
+            Line:
+                width:1.1 #border width
+                rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+
+        TextInput:
+            id: tips_title_input
+            hint_text: "Title"
+            multiline: False
+            size_hint: .25, None
+            pos_hint: {"center_x": .14, "center_y": .54}
+            height: self.minimum_height
+            background_color: 1, 1, 1, 0
+            font_size: "14sp"
+            #add font here#
+            hint_text_color: 126/255, 188/255, 137/255, 1 #light green
+            padding:13
+            cursor_color: 0,0,0,1
+
+    MDFloatLayout:
+        size_hint: .9, .15
+        pos_hint: {"center_x": .5, "center_y": .50}
+        canvas:
+            Color:
+                rgb: 250/255, 237/255, 202/255, 1 #1st box background color (cream)
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                radius: [4]
+        canvas.before:
+            Color:
+                rgb: 254/255, 93/255, 38/255, 1 #border color
+            Line:
+                width:1.1 #border width
+                rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+
+        TextInput:
+            id: tips_content_input
+            hint_text: "Content"
+            multiline: True
+            size_hint: .5, None
+            pos_hint: {"center_x": .25, "center_y": .8}
+            height: self.minimum_height
+            background_color: 1, 1, 1, 0
+            font_size: "14sp"
+            #add font here#
+            hint_text_color: 126/255, 188/255, 137/255, 1 #light green
+            padding:13
+            cursor_color: 0,0,0,1
+
+    MDFloatLayout:
+        size_hint: .9, .05
+        pos_hint: {"center_x": .5, "center_y": .36}
+        canvas:
+            Color:
+                rgb: 250/255, 237/255, 202/255, 1 #1st box background color (cream)
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                radius: [4]
+        canvas.before:
+            Color:
+                rgb: 254/255, 93/255, 38/255, 1 #border color
+            Line:
+                width:1.1 #border width
+                rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+
+        TextInput:
+            id: tips_category_input
+            hint_text: "Category"
+            multiline: True
+            size_hint: .5, None
+            pos_hint: {"center_x": .26, "center_y": .58}
+            height: self.minimum_height
+            background_color: 1, 1, 1, 0
+            font_size: "14sp"
+            #add font here#
+            hint_text_color: 126/255, 188/255, 137/255, 1 #light green
+            padding:13
+            cursor_color: 0,0,0,1
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .5, "center_y": .18}
+        size: (1, .5)
+        font_size: 14
+        #md_bg_color: 0.996, 0.365, 0.149
+        md_bg_color: (248/255, 143/255, 79/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Add My Tip"
+        on_press: app.submit()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
