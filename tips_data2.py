@@ -20,7 +20,7 @@ class AllTips(Screen):
         db_connect = mysql.connector.connect(
             host="localhost",
             user="root",
-            passwd="SoSweet.47",
+            passwd="",
             database="bonfire_tips_db"
         )
         # Create cursor
@@ -74,7 +74,7 @@ class MountainTips(Screen):
         self.manager.current = ''
         db_connect = mysql.connector.connect(
             user="root",
-            password="SoSweet.47",
+            password="",
             host="localhost",
             database="bonfire_tips_db"
         )
@@ -110,7 +110,7 @@ class PiedmontTips(Screen):
         self.manager.current = ''
         db_connect = mysql.connector.connect(
             user="root",
-            password="SoSweet.47",
+            password="",
             host="localhost",
             database="bonfire_tips_db"
         )
@@ -142,7 +142,7 @@ class CoastTips(Screen):
         self.manager.current = ''
         db_connect = mysql.connector.connect(
             user="root",
-            password="SoSweet.47",
+            password="",
             host="localhost",
             database="bonfire_tips_db"
         )
@@ -188,7 +188,7 @@ class Bonfire(MDApp, ScreenManager):
         # Connect to database
         db_connect = mysql.connector.connect(
             user="root",
-            password="SoSweet.47",
+            password="",
             host="localhost",
             database="bonfire_tips_db"
         )
