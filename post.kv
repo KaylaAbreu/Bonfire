@@ -338,8 +338,8 @@
             md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
             Image:
                 source: "mountain.png"
-                pos_hint: {"center_x": .5, "center_y": .65}
-                size_hint: .7, .7
+                pos_hint: {"center_x": .5, "center_y": .777}
+                size_hint: 1, .7
                 canvas:
                     Color:
                         rgb: 250/255, 250/255, 250/255, 1
@@ -350,12 +350,21 @@
             MDRaisedButton:
                 md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
                 size_hint: .6, .07
-                pos_hint: {"center_x": .5, "center_y": .3}
+                pos_hint: {"center_x": .5, "center_y": .4}
                 text: "Mountain Bonfire Stories"
                 text_color: 44/255, 44/255, 4/255, 1 #gray
                 on_release:
                     root.manager.transition.direction = "left"
                     root.manager.current = "ViewMtPostScreen"
+            MDRaisedButton:
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                size_hint: .6, .07
+                pos_hint: {"center_x": .5, "center_y": .2}
+                text: "Mountain Adventure Tips"
+                text_color: 44/255, 44/255, 4/255, 1 #gray
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "MountainTips"
 <ViewMtPostScreen>:
     MDBoxLayout:
         md_bg_color: 250/255, 237/255, 202/255, 1  # White color in RGBA format
@@ -414,9 +423,11 @@
                 Color:
                     rgb: 250/255, 250/255, 250/255, 1 #1st box background color
                 RoundedRectangle:
+                    #size: self.size
                     size: self.size
                     pos: self.pos
                     radius: [4]
+
             canvas.before:
                 Color:
                     rgb: 217/255, 217/255, 217/255, 1 #border color
@@ -556,8 +567,8 @@
             md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
             Image:
                 source: "piedmont.png"
-                pos_hint: {"center_x": .5, "center_y": .65}
-                size_hint: .7, .7
+                pos_hint: {"center_x": .5, "center_y": .777}
+                size_hint: 1, .9
                 canvas:
                     Color:
                         rgb: 250/255, 250/255, 250/255, 1
@@ -568,12 +579,21 @@
             MDRaisedButton:
                 md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
                 size_hint: .6, .07
-                pos_hint: {"center_x": .5, "center_y": .3}
+                pos_hint: {"center_x": .5, "center_y": .4}
                 text: "Piedmont Bonfire Stories"
                 text_color: 44/255, 44/255, 4/255, 1 #gray
                 on_release:
                     root.manager.transition.direction = "left"
                     root.manager.current = "ViewPtPostScreen"
+            MDRaisedButton:
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                size_hint: .6, .07
+                pos_hint: {"center_x": .5, "center_y": .2}
+                text: "Piedmont Adventure Tips"
+                text_color: 44/255, 44/255, 4/255, 1 #gray
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "PiedmontTips"
 <AddPtPostScreen>:
     MDBoxLayout:
         md_bg_color: 250/255, 237/255, 202/255, 1 #off white
@@ -636,6 +656,68 @@
                 text: "Add Story"
                 on_press:
                     root.pt_submit()
+<PtCommentScreen>:
+    MDBoxLayout:
+        #md_bg_color: 0.996, 0.365, 0.149, 1  # Orange color in RGBA format
+        md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Piedmont Comments"
+            anchor_title: "left"
+            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 79/255, 1  # light Orange color in RGBA format
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            Label:
+                id: post_label
+                text_size: self.size
+                align: "center"
+                valign: "middle"
+                font_size: 22
+                pos_hint: {"center_x": .6, "center_y": .8}
+        MDFloatLayout:
+            size_hint: .9, .7
+            pos_hint: {"center_x": .5, "center_y": .8}
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1 #1st box background color
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [4]
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1 #border color
+                Line:
+                    width:1.1 #border width
+                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+            TextInput:
+                id: post_input
+                hint_text: "Add Your Comment Here"
+                multiline: True
+                size_hint: 1, None
+                pos_hint: {"center_x": .5, "center_y": .78}
+                height: self.minimum_height
+                background_color: 1, 1, 1, 0
+                font_size: "14sp"
+                hint_text_color: 170/255, 170/255, 170/255, 1
+                padding:13
+                cursor_color: 0,0,0,1
+            #MDLabel:
+            #    pos_hint: {"center_x": 1.1, "center_y": -.15}
+            #    text: "[ Upload photo ]"
+            #   font_size: 19
+        MDFloatLayout:
+            MDRaisedButton:
+                pos_hint: {"center_x": .5, "center_y": .45}
+                size: (1, .5)
+                font_size: 32
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                text_color: 44/255, 44/255, 44/255, 1 #gray
+                text: "Add Comment"
+                on_press:
+                    root.pt_comment_submit()
 <ViewCtPostScreen>:
     MDBoxLayout:
         md_bg_color: 250/255, 237/255, 202/255, 1 #offwhite
@@ -680,8 +762,8 @@
             md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
             Image:
                 source: "coast.png"
-                pos_hint: {"center_x": .5, "center_y": .65}
-                size_hint: .7, .7
+                pos_hint: {"center_x": .5, "center_y": .777}
+                size_hint: 1, .7
                 canvas:
                     Color:
                         rgb: 250/255, 250/255, 250/255, 1
@@ -692,12 +774,21 @@
             MDRaisedButton:
                 md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
                 size_hint: .6, .07
-                pos_hint: {"center_x": .5, "center_y": .3}
-                text: "Piedmont Bonfire Stories"
+                pos_hint: {"center_x": .5, "center_y": .4}
+                text: "Coastal Bonfire Stories"
                 text_color: 44/255, 44/255, 4/255, 1 #gray
                 on_release:
                     root.manager.transition.direction = "left"
                     root.manager.current = "ViewCtPostScreen"
+            MDRaisedButton:
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                size_hint: .6, .07
+                pos_hint: {"center_x": .5, "center_y": .2}
+                text: "Coastal Adventure Tips"
+                text_color: 44/255, 44/255, 4/255, 1 #gray
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "CoastTips"
 <AddCtPostScreen>:
     MDBoxLayout:
         md_bg_color: 250/255, 237/255, 202/255, 1 #offwhite
@@ -764,6 +855,68 @@
                 text: "Add Story"
                 on_press:
                     root.ct_submit()
+<CtCommentScreen>:
+    MDBoxLayout:
+        #md_bg_color: 0.996, 0.365, 0.149, 1  # Orange color in RGBA format
+        md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Coastal Comments"
+            anchor_title: "left"
+            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 79/255, 1  # light Orange color in RGBA format
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            Label:
+                id: post_label
+                text_size: self.size
+                align: "center"
+                valign: "middle"
+                font_size: 22
+                pos_hint: {"center_x": .6, "center_y": .8}
+        MDFloatLayout:
+            size_hint: .9, .7
+            pos_hint: {"center_x": .5, "center_y": .8}
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1 #1st box background color
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [4]
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1 #border color
+                Line:
+                    width:1.1 #border width
+                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+            TextInput:
+                id: post_input
+                hint_text: "Add Your Comment Here"
+                multiline: True
+                size_hint: 1, None
+                pos_hint: {"center_x": .5, "center_y": .78}
+                height: self.minimum_height
+                background_color: 1, 1, 1, 0
+                font_size: "14sp"
+                hint_text_color: 170/255, 170/255, 170/255, 1
+                padding:13
+                cursor_color: 0,0,0,1
+            #MDLabel:
+            #    pos_hint: {"center_x": 1.1, "center_y": -.15}
+            #    text: "[ Upload photo ]"
+            #   font_size: 19
+        MDFloatLayout:
+            MDRaisedButton:
+                pos_hint: {"center_x": .5, "center_y": .45}
+                size: (1, .5)
+                font_size: 32
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                text_color: 44/255, 44/255, 44/255, 1 #gray
+                text: "Add Comment"
+                on_press:
+                    root.ct_comment_submit()
 <UserPostScreen>:
     MDBoxLayout:
         md_bg_color: 250/255, 237/255, 202/255, 1  # White color in RGBA formatS
