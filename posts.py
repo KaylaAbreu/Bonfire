@@ -1,9 +1,20 @@
+from kivy.uix.boxlayout import BoxLayout
+from kivymd.uix.menu import MDDropdownMenu
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.stacklayout import StackLayout
+from kivy.uix.textinput import TextInput
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.window import Window
-from kivymd.uix.list import TwoLineListItem, ThreeLineAvatarIconListItem, IconRightWidget, IconLeftWidget
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.list import TwoLineListItem, ThreeLineAvatarIconListItem, IconRightWidget, IconLeftWidget, \
+    ThreeLineListItem, MDList
+from kivymd.uix.button import MDRectangleFlatButton, MDIconButton
+from kivy.uix.button import Button
+import requests
 import mysql.connector
+from kivymd.uix.textfield import MDTextField
 
 Window.size = (350, 580)
 
@@ -54,60 +65,263 @@ class ForgotPasswordScreen(Screen):
 
 class SuccessScreen(Screen):
     pass
+class Alerts():
+    def __init__(self):
+        self.headline1 = None
+        self.headline2 = None
+        self.headline3 = None
+    def alerts(self):
+        state = "NC"
+        response = requests.get(f'https://api.weather.gov/alerts/active?area={state}').json()
+        mountains = ['Cherokee;', 'Graham;', 'Clay;', 'Macon;', 'Swain;', 'Jackson;', 'Haywood;', 'Transylvania;',
+                     'Henderson;',
+                     'Buncombe;', 'Madison;', 'Yancey;', 'Mitchell;', 'McDowell;', 'Rutherford;', 'Polk;', 'Burke;',
+                     'Caldwell;',
+                     'Avery;', 'Watauga;', 'Ashe;', 'Wilkes;', 'Alleghany;']
+        piedmont = ['Cleveland;', 'Gaston;', 'Lincoln;', 'Catawba;', 'Alexander;', 'Iredell;', 'Mecklenburg;', 'Union;',
+                    'Anson;', 'Richmond;', 'Montgomery;', 'Stanly;', 'Cabarrus;', 'Rowan;', 'Moore;', 'Lee;', 'Chatham;',
+                    'Randolph;', 'Davidson;', 'Davie;', 'Yadkin;', 'Forsyth;', 'Guilford;', 'Orange;', 'Wake;', 'Franklin;',
+                    'Durham;', 'Orange;', 'Alamance;', 'Surry;', 'Stokes;', 'Rockingham;', 'Caswell;', 'Person;', 'Granville;',
+                    'Vance;', 'Warren;']
+        coast = ['Brunswick;', 'Columbus;', 'Robeson;', 'Scotland;', 'Hoke;', 'Bladen;', 'Cumberland;', 'Harnett;', 'Sampson;',
+                 'Pender;', 'Duplin;', 'Onslow;', 'Jones;', 'Carteret;', 'Craven;', 'Lenior;', 'Wayne;', 'Johnston;', 'Wilson;',
+                 'Nash;', 'Edgecombe;', 'Pitt;', 'Greene;', 'Pamlico;', 'Hyde;', 'Beaufort;', 'Dare;', 'Tyrrell;', 'Washington;',
+                 'Martin;', 'Bertie;', 'Halifax;', 'Northampton;', 'Hertford;', 'Gates;', 'Currituck;', 'Camden;', 'Pasquotank;',
+                 'Perquimans;', 'Chowan;']
 
+        found_county = ['']
+        for county in mountains:
+            for i in response['features']:
+                area_desc = i['properties']['areaDesc']
+                if county in area_desc:
+                    found_county = county
+                    self.headline1 = i['properties']['headline']
+                    # print(i['properties']['areaDesc'])
+                    # print(i['properties']['description'])
+                    break
+            if found_county:
+                break
+        if found_county is None:
+            print("none")
 
-class ViewMtPostScreen(Screen):
+        for county in piedmont:
+            for i in response['features']:
+                area_desc = i['properties']['areaDesc']
+                if county in area_desc:
+                    found_county = county
+                    self.headline2 = i['properties']['headline']
+                    # print(i['properties']['areaDesc'])
+                    # print(i['properties']['description'])
+                    break
+            if found_county:
+                break
+        if found_county is None:
+            print("none")
+
+        for county in coast:
+            for i in response['features']:
+                area_desc = i['properties']['areaDesc']
+                if county in area_desc:
+                    found_county = county
+                    self.headline3 = i['properties']['headline']
+                    # print(i['properties']['areaDesc'])
+                    # print(i['properties']['description'])
+                    break
+            if found_county:
+                break
+        if found_county is None:
+            print("none")
+
+class WelcomeMtScreen(Screen):
     def on_enter(self):
-        db_connect = mysql.connector.connect(
-            user="root",
-            password="",
-            host="localhost",
-            database="bonfire"
+        alert_headline = Alerts()
+        alert_headline.alerts()
+        self.dialog = MDDialog(
+            title="Alert for the Mountain Region",
+            text=alert_headline.headline1,
+            buttons=[MDRectangleFlatButton(text="Close", on_release=self.close)]
         )
-        # Create cursor
-        c = db_connect.cursor()
-
-        # Get stories from database
-        c.execute("SELECT * FROM posts WHERE location = 'mountain'")
-        stories = c.fetchall()
-
-        # Prevent repeats
-        self.ids.mt_story_container.clear_widgets()
-
-        # Populate MDList with username and post content
-        for i in stories:
-            self.ids.mt_story_container.add_widget(TwoLineListItem(text=f'{i[2]}', secondary_text=f'{i[3]}'))
-
-        db_connect.close()
+        self.dialog.open()
+    def close(self, *args):
+        self.dialog.dismiss()
 
     def callback(self):
         self.manager.transition.direction = "right"
         self.manager.current = "SuccessScreen"
 
+class WelcomePtScreen(Screen):
+    def on_enter(self):
+        alert_headline = Alerts()
+        alert_headline.alerts()
+        self.dialog = MDDialog(
+            title="Alert for the Piedmont Region",
+            text=alert_headline.headline2,
+            buttons=[MDRectangleFlatButton(text="Close", on_release=self.close)]
+        )
+        self.dialog.open()
+    def close(self, *args):
+        self.dialog.dismiss()
 
+    def callback(self):
+        self.manager.transition.direction = "right"
+        self.manager.current = "SuccessScreen"
+class WelcomeCtScreen(Screen):
+    def on_enter(self):
+        alert_headline = Alerts()
+        alert_headline.alerts()
+        self.dialog = MDDialog(
+            title="Alert for the Coast Region",
+            text=alert_headline.headline3,
+            buttons=[MDRectangleFlatButton(text="Close", on_release=self.close)]
+        )
+        self.dialog.open()
+    def close(self, *args):
+        self.dialog.dismiss()
+
+    def callback(self):
+        self.manager.transition.direction = "right"
+        self.manager.current = "SuccessScreen"
+class ViewMtPostScreen(Screen):
+    def on_enter(self):
+        app = MDApp.get_running_app()
+        app.cursor.execute("SELECT * FROM posts WHERE location = 'mountain'")
+        stories = app.cursor.fetchall()
+        # Prevent repeats
+        self.ids.mt_story_container.clear_widgets()
+        for i in stories:
+            post_id = i[0]
+            post_user = i[2]
+            post_body = i[3]
+
+            post_display = TwoLineListItem(
+                text=post_user,
+                secondary_text=post_body,
+                on_release=lambda x, post_id=post_id: self.open_comments(post_id),
+            )
+            expand_button = MDRectangleFlatButton(text="View Story",
+                                                  pos_hint={'center_x': 0.8},
+                                                  text_color="black")
+            expand_button.bind(on_release=lambda instance, post_id=post_id, post_body=post_body: self.expand_story(post_id, post_body))
+            self.ids.mt_story_container.add_widget(expand_button)
+            self.ids.mt_story_container.add_widget(post_display)
+    def open_comments(self, post_id):
+        app = MDApp.get_running_app()
+        app.cursor.execute("SELECT * FROM comments WHERE post_ID = %s", (post_id,))
+        comments = app.cursor.fetchall()
+
+        menu_posts = [
+            {
+                "viewclass": "TwoLineListItem",
+                "text": comment[3],
+                "secondary_text": comment[4],
+                "on_release": lambda x=comment[4]: dropdown.dismiss(),
+            }
+            for comment in comments
+        ]
+        dropdown = MDDropdownMenu(
+            caller=self.ids.mt_story_container,
+            items=menu_posts,
+            width_mult=4,
+        )
+        dropdown.open()
+
+    def menu_callback(self, instance):
+        instance.dismiss()
+    def expand_story(self, post_id, post_body):
+        self.dialog = MDDialog(text=post_body,
+            buttons=[
+                MDRectangleFlatButton(
+                    text="Add Comment",
+                    pos_hint={"center_x":0.5, "center_y":0.5},
+                    on_release=lambda instance, post_id=post_id: self.add_mt_comment(post_id)
+                )
+            ]
+        )
+        self.dialog.open()
+    def add_mt_comment(self, post_id):
+        self.dialog.dismiss()
+        self.manager.get_screen('MtCommentScreen').post_id = post_id
+        self.manager.current = "MtCommentScreen"
+
+    def callback(self):
+        self.manager.transition.direction = "right"
+        self.manager.current = "SuccessScreen"
+
+class MtCommentScreen(Screen):
+    post_id = None
+    def mt_comment_submit(self):
+        app = MDApp.get_running_app()
+
+        username = self.manager.get_screen('LoginScreen').current_user
+        user_ID = self.manager.get_screen('LoginScreen').user_ID
+        # post_ID = self.manager.get_screen('ViewMtPostScreen').post_id
+
+        print(self.post_id)
+        # Check length of post
+        if len(self.ids.post_input.text) == 0:
+            dialog = MDDialog(text="Please add a comment")
+            dialog.open()
+            self.manager.current = 'MtCommentScreen'
+
+        elif len(self.ids.post_input.text) < 255:
+            # Add record to database
+            sql_command = "INSERT INTO comments (post_ID, user_ID, username, content, location) VALUES (%s, %s, %s, %s, 'mountain')"
+            values = (self.post_id, user_ID, username, self.ids.post_input.text,)
+
+            # Execute command
+            app.cursor.execute(sql_command, values)
+
+            # Clear input box
+            self.ids.post_input.text = ''
+
+            # Commit changes to database
+            app.database.commit()
+
+            self.manager.current = 'ViewMtPostScreen'
+        else:
+            dialog = MDDialog(text="Posts must be under 255 characters")
+            dialog.open()
+            self.manager.current = 'MtCommentScreen'
+
+        # # Prevent repeats
+        # self.ids.mt_comment_container.clear_widgets()
+        #
+        # # Populate MDList with username and post content
+        # for i in stories:
+        #     expand_button = MDRectangleFlatButton(text="More",
+        #                                           pos_hint={'center_x': 0.8},
+        #                                           text_color="black")
+        #     expand_button.bind(on_release=lambda instance, post=i[3]: self.expand_story(post))
+        #     self.ids.mt_comment_container.add_widget(expand_button)
+        #     self.ids.mt_comment_container.add_widget(TwoLineListItem(text=f'{i[2]}', secondary_text=f'{i[3]}'))
+        #
+        # db_connect.close()
+
+    def callback(self):
+        self.manager.transition.direction = "right"
+        self.manager.current = "SuccessScreen"
 class ViewPtPostScreen(Screen):
     def on_enter(self):
-        db_connect = mysql.connector.connect(
-            user="root",
-            password="",
-            host="localhost",
-            database="bonfire"
-        )
-        # Create cursor
-        c = db_connect.cursor()
-
+        app = MDApp.get_running_app()
         # Get stories from database
-        c.execute("SELECT * FROM posts WHERE location = 'piedmont'")
-        stories = c.fetchall()
+        app.cursor.execute("SELECT * FROM posts WHERE location = 'piedmont'")
+        stories = app.cursor.fetchall()
 
         # Prevent repeats
         self.ids.pt_story_container.clear_widgets()
 
         # Populate MDList with username and post content
         for i in stories:
+            expand_button = MDRectangleFlatButton(text="More",
+                                                  pos_hint={'center_x': 0.8},
+                                                  text_color="black")
+            expand_button.bind(on_release=lambda instance, post=i[3]: self.expand_story(post))
+            self.ids.pt_story_container.add_widget(expand_button)
             self.ids.pt_story_container.add_widget(TwoLineListItem(text=f'{i[2]}', secondary_text=f'{i[3]}'))
 
-        db_connect.close()
+    def expand_story(self, post):
+        dialog = MDDialog(text=post)
+        dialog.open()
 
     def callback(self):
         self.manager.transition.direction = "right"
@@ -116,26 +330,27 @@ class ViewPtPostScreen(Screen):
 
 class ViewCtPostScreen(Screen):
     def on_enter(self):
-        db_connect = mysql.connector.connect(
-            user="root",
-            password="",
-            host="localhost",
-            database="bonfire"
-        )
-        # Create cursor
-        c = db_connect.cursor()
+        app = MDApp.get_running_app()
 
         # Get stories from database
-        c.execute("SELECT * FROM posts WHERE location = 'coast'")
-        stories = c.fetchall()
+        app.cursor.execute("SELECT * FROM posts WHERE location = 'coast'")
+        stories = app.cursor.fetchall()
 
         # Prevent repeats
         self.ids.ct_story_container.clear_widgets()
 
         # Populate MDList with username and post content
         for i in stories:
+            expand_button = MDRectangleFlatButton(text="More",
+                                           pos_hint={'center_x': 0.8},
+                                           text_color="black")
+            expand_button.bind(on_release=lambda instance, post=i[3]: self.expand_story(post))
+            self.ids.ct_story_container.add_widget(expand_button)
             self.ids.ct_story_container.add_widget(TwoLineListItem(text=f'{i[2]}', secondary_text=f'{i[3]}'))
-        db_connect.close()
+
+    def expand_story(self, post):
+        dialog = MDDialog(text=post)
+        dialog.open()
 
     def callback(self):
         self.manager.transition.direction = "right"
@@ -144,37 +359,36 @@ class ViewCtPostScreen(Screen):
 
 class AddMtPostScreen(Screen):
     def mt_submit(self):
-        db_connect = mysql.connector.connect(
-            user="root",
-            password="",
-            host="localhost",
-            database="bonfire"
-        )
-        # Create cursor
-        c = db_connect.cursor()
+        app = MDApp.get_running_app()
 
         username = self.manager.get_screen('LoginScreen').current_user
         user_ID = self.manager.get_screen('LoginScreen').user_ID
 
-        # Add record to database
-        sql_command = "INSERT INTO posts (user_ID, username, content, location) VALUES (%s, %s, %s, 'mountain')"
-        values = (user_ID, username, self.ids.post_input.text,)
+        # Check length of post
+        if len(self.ids.post_input.text) == 0:
+            dialog = MDDialog(text="Please add a story")
+            dialog.open()
+            self.manager.current = 'AddMtPostScreen'
 
-        # Execute command
-        c.execute(sql_command, values)
+        elif len(self.ids.post_input.text) < 255:
+            # Add record to database
+            sql_command = "INSERT INTO posts (user_ID, username, content, location) VALUES (%s, %s, %s, 'mountain')"
+            values = (user_ID, username, self.ids.post_input.text,)
 
-        # TODO check for empty post
-        # # post = self.root.ids.post_input.text
-        # self.root.ids.post_input_label.text = f'{self.root.ids.post_input.text}'
+            # Execute command
+            app.cursor.execute(sql_command, values)
 
-        # Clear input box
-        self.ids.post_input.text = ''
+            # Clear input box
+            self.ids.post_input.text = ''
 
-        # Commit changes to database
-        db_connect.commit()
-        db_connect.close()
+            # Commit changes to database
+            app.database.commit()
 
-        self.manager.current = 'ViewMtPostScreen'
+            self.manager.current = 'ViewMtPostScreen'
+        else:
+            dialog = MDDialog(text="Posts must be under 255 characters")
+            dialog.open()
+            self.manager.current = 'AddMtPostScreen'
 
     def callback(self):
         self.manager.transition.direction = "right"
@@ -183,36 +397,36 @@ class AddMtPostScreen(Screen):
 
 class AddPtPostScreen(Screen):
     def pt_submit(self):
-        db_connect = mysql.connector.connect(
-            user="root",
-            password="",
-            host="localhost",
-            database="bonfire"
-        )
-        # Create cursor
-        c = db_connect.cursor()
+        app = MDApp.get_running_app()
+
         username = self.manager.get_screen('LoginScreen').current_user
         user_ID = self.manager.get_screen('LoginScreen').user_ID
 
-        # Add record to database
-        sql_command = "INSERT INTO posts (user_ID, username, content, location) VALUES (%s, %s, %s, 'piedmont')"
-        values = (user_ID, username, self.ids.post_input.text,)
+        # Check length of post
+        if len(self.ids.post_input.text) == 0:
+            dialog = MDDialog(text="Please add a story")
+            dialog.open()
+            self.manager.current = 'AddPtPostScreen'
 
-        # Execute command
-        c.execute(sql_command, values)
+        elif len(self.ids.post_input.text) < 255:
+            # Add record to database
+            sql_command = "INSERT INTO posts (user_ID, username, content, location) VALUES (%s, %s, %s, 'piedmont')"
+            values = (user_ID, username, self.ids.post_input.text,)
 
-        # TODO check for empty post
-        # # post = self.root.ids.post_input.text
-        # self.root.ids.post_input_label.text = f'{self.root.ids.post_input.text}'
+            # Execute command
+            app.cursor.execute(sql_command, values)
 
-        # Clear input box
-        self.ids.post_input.text = ''
+            # Clear input box
+            self.ids.post_input.text = ''
 
-        # Commit changes to database
-        db_connect.commit()
-        db_connect.close()
+            # Commit changes to database
+            app.database.commit()
 
-        self.manager.current = 'ViewPtPostScreen'
+            self.manager.current = 'ViewPtPostScreen'
+        else:
+            dialog = MDDialog(text="Posts must be under 255 characters")
+            dialog.open()
+            self.manager.current = 'AddPtPostScreen'
 
     def callback(self):
         self.manager.transition.direction = "right"
@@ -221,36 +435,38 @@ class AddPtPostScreen(Screen):
 
 class AddCtPostScreen(Screen):
     def ct_submit(self):
-        db_connect = mysql.connector.connect(
-            user="root",
-            password="",
-            host="localhost",
-            database="bonfire"
-        )
-        # Create cursor
-        c = db_connect.cursor()
+        app = MDApp.get_running_app()
+
         username = self.manager.get_screen('LoginScreen').current_user
         user_ID = self.manager.get_screen('LoginScreen').user_ID
 
-        # Add record to database
-        sql_command = "INSERT INTO posts (user_ID, username, content, location) VALUES (%s, %s, %s, 'coast')"
-        values = (user_ID, username, self.ids.post_input.text,)
+        # Check length of post
+        if len(self.ids.post_input.text) == 0:
+            dialog = MDDialog(text="Please add a story")
+            dialog.open()
+            self.manager.current = 'AddCtPostScreen'
 
-        # Execute command
-        c.execute(sql_command, values)
+        elif len(self.ids.post_input.text) < 255:
+            # Add record to database
+            sql_command = "INSERT INTO posts (user_ID, username, content, location) VALUES (%s, %s, %s, 'coast')"
+            values = (user_ID, username, self.ids.post_input.text,)
 
-        # TODO check for empty post
-        # # post = self.root.ids.post_input.text
-        # self.root.ids.post_input_label.text = f'{self.root.ids.post_input.text}'
+            # Execute command
+            app.cursor.execute(sql_command, values)
 
-        # Clear input box
-        self.ids.post_input.text = ''
+            # Clear input box
+            self.ids.post_input.text = ''
 
-        # Commit changes to database
-        db_connect.commit()
-        db_connect.close()
+            # Commit changes to database
+            app.database.commit()
 
-        self.manager.current = 'ViewCtPostScreen'
+            self.manager.current = 'ViewCtPostScreen'
+        else:
+            dialog = MDDialog(text="Posts must be under 255 characters")
+            dialog.open()
+            self.manager.current = 'AddCtPostScreen'
+
+
 
     def callback(self):
         self.manager.transition.direction = "right"
@@ -259,54 +475,78 @@ class AddCtPostScreen(Screen):
 
 class UserPostScreen(Screen):
     def on_enter(self):
-        db_connect = mysql.connector.connect(
-            user="root",
-            password="",
-            host="localhost",
-            database="bonfire"
-        )
-        # Create cursor
-        c = db_connect.cursor()
+        app = MDApp.get_running_app()
 
         username = self.manager.get_screen('LoginScreen').current_user
 
         # Get stories from database
         sql_command = "SELECT * FROM posts JOIN login ON posts.user_ID = login.user_ID WHERE login.username = %s"
-        c.execute(sql_command, (username,))
-        stories = c.fetchall()
+        app.cursor.execute(sql_command, (username,))
+        stories = app.cursor.fetchall()
 
         # Prevent repeats
         self.ids.user_story_container.clear_widgets()
-
         for i in stories:
-            story = ThreeLineAvatarIconListItem(IconLeftWidget(icon="pencil-outline"), IconRightWidget(icon="delete"))
-            story.text = f'{i[2]}'
-            story.secondary_text = f'{i[3]}'
-            story.tertiary_text = f'Location: {i[4]}'
-            story.ids.primary_key = i[0]
-            # story.children[1].bind(on_press =self.remove_story)
+            self.post_id = i[0]
+            self.post_content = i[3]
 
-            self.ids.user_story_container.add_widget(story)
+            edit_button = MDIconButton(icon="pencil-outline")
+            edit_button.bind(on_release=lambda instance, post=self.post_id: self.edit_story(post))
+            edit_button.edit_id = self.post_id
+            self.ids.user_story_container.add_widget(edit_button)
+            delete_button = MDIconButton(icon="delete")
+            delete_button.bind(on_release=lambda instance, post=self.post_id: self.remove_story(post))
+            delete_button.del_id = self.post_id
+            self.ids.user_story_container.add_widget(delete_button)
 
-    # TODO Fix (never reaches)
-    def remove_story(self, instance):
-        print("remove story")
-        primary_key = instance.ids.primary_key
-        self.user_story_container.remove_widget(instance)
+            ulist = ThreeLineListItem(text=f'{i[2]}', secondary_text=f'{i[3]}', tertiary_text=f'Location: {i[4]}')
+            ulist.post_id = self.post_id
+            self.ids.user_story_container.add_widget(ulist)
 
-        db_connect = mysql.connector.connect(
-            user="root",
-            password="",
-            host="localhost",
-            database="bonfire"
-        )
-        # Create cursor
-        c = db_connect.cursor()
+
+    def edit_story(self, post):
+        self.new_content=MDTextField(multiline=True)
+        self.dialog = MDDialog(title='Edit your story',
+                          text=self.post_content,
+                          type="custom",
+                          # content_cls=self.new_content,
+                          content_cls=self.new_content,
+                          # size_hint=[.5, None],
+                          buttons=[MDRectangleFlatButton(text="Save", on_release=lambda x: self.save_story(post))])
+        self.dialog.open()
+
+    def save_story(self,post):
+        save_new_content = self.new_content.text
+
+        app = MDApp.get_running_app()
+
+        sql_command = "UPDATE posts SET content=%s WHERE post_id = %s"
+        app.cursor.execute(sql_command, (save_new_content,post))
+        app.database.commit()
+
+        self.dialog.dismiss()
+        self.on_enter()
+        self.manager.current = "UserPostScreen"
+    def remove_story(self, post):
+        app = MDApp.get_running_app()
+
         sql_command = "DELETE FROM posts WHERE post_id = %s"
-        c.execute(sql_command, (primary_key,))
-        db_connect.commit()
+        app.cursor.execute(sql_command, (post,))
+        app.database.commit()
 
-        # self.ids.user_story_container.remove_widget(instance)
+        # remove TwoListItem and Button
+        remove_container = []
+        for widget in self.ids.user_story_container.children:
+            if hasattr(widget, 'post_id') and widget.post_id == post:
+                remove_container.append(widget)
+            elif hasattr(widget, 'edit_id') and widget.edit_id == post:
+                remove_container.append(widget)
+            elif hasattr(widget, 'del_id') and widget.del_id == post:
+                remove_container.append(widget)
+        for widget in remove_container:
+            self.ids.user_story_container.remove_widget(widget)
+        self.manager.current = "UserPostScreen"
+
     def callback(self):
         self.manager.transition.direction = "right"
         self.manager.current = "SuccessScreen"
@@ -318,7 +558,7 @@ class Bonfire(MDApp):
 
     def build(self):
         # window icon
-        self.icon = "img.png"
+        self.icon = "piedmont.png"
 
         Builder.load_file("post.kv")
 
@@ -334,13 +574,13 @@ class Bonfire(MDApp):
         screen_manager.add_widget(ViewCtPostScreen(name='ViewCtPostScreen'))
         screen_manager.add_widget(AddCtPostScreen(name='AddCtPostScreen'))
         screen_manager.add_widget(UserPostScreen(name='UserPostScreen'))
+        screen_manager.add_widget(MtCommentScreen(name='MtCommentScreen'))
+        screen_manager.add_widget(WelcomeMtScreen(name='WelcomeMtScreen'))
+        screen_manager.add_widget(WelcomePtScreen(name='WelcomePtScreen'))
+        screen_manager.add_widget(WelcomeCtScreen(name='WelcomeCtScreen'))
 
         return screen_manager
 
 
 if __name__ == '__main__':
     Bonfire().run()
-
-
-
-

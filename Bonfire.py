@@ -45,7 +45,6 @@ class LoginScreen(Screen):
 
 class SuccessScreen(Screen):
     def on_logout(self):
-
         self.manager.current = 'login'
 
 
@@ -74,7 +73,6 @@ class SignupScreen(Screen):
 
             self.manager.current = 'login'
 
-
     def check_username_exists(self, username):
         app = MDApp.get_running_app()
 
@@ -86,31 +84,30 @@ class SignupScreen(Screen):
         return result is not None
 
 
-
 class ForgotPasswordScreen(Screen):
     def on_login(self):
 
         self.manager.current = 'login'
 
     def store_reset_code(self, username, reset_code):
-            app = MDApp.get_running_app()
-            try:
+        app = MDApp.get_running_app()
+        try:
 
-                query = "SELECT * FROM login WHERE username = %s"
-                app.cursor.execute(query, (username,))
-                result = app.cursor.fetchone()
+            query = "SELECT * FROM login WHERE username = %s"
+            app.cursor.execute(query, (username,))
+            result = app.cursor.fetchone()
 
-                if result:
+            if result:
 
-                    update_query = "UPDATE login SET reset_code = %s WHERE username = %s"
-                    app.cursor.execute(update_query, (reset_code, username))
-                    app.database.commit()
-                    self.ids.message_label.text = "Reset code updated successfully."
-                else:
+                update_query = "UPDATE login SET reset_code = %s WHERE username = %s"
+                app.cursor.execute(update_query, (reset_code, username))
+                app.database.commit()
+                self.ids.message_label.text = "Reset code updated successfully."
+            else:
 
-                    self.ids.error_label.text = "User not found."
-            except Exception as e:
-                print("Error updating reset code:", str(e))
+                self.ids.error_label.text = "User not found."
+        except Exception as e:
+            print("Error updating reset code:", str(e))
 
     def send_reset_code(self, username):
         # Retrieve the user's email address from the database based on the username
@@ -204,13 +201,13 @@ class ChangePasswordScreen(Screen):
         app.cursor.execute("UPDATE login SET reset_code = NULL WHERE username = %s", (username,))
         app.database.commit()
 
+
 class Bonfire(MDApp):
     database = mysql.connector.Connect(host="localhost", user="root", password="admin321", database="bonfire")
     cursor = database.cursor()
     cursor.execute("select * from login")
     for i in cursor.fetchall():
         print(i[0], i[1])
-
 
     def build(self):
         self.theme_cls.theme_style = "Dark"
@@ -315,7 +312,7 @@ ScreenManager:
                 pos_hint:{"center_x":0.5, "center_y": -4.6}
                 font_size: "13sp"
                 on_release: root.on_forgotPassword()
-                
+
         MDLabel:
             id: error_label
             text: " "
@@ -328,9 +325,9 @@ ScreenManager:
             markup: True
             font_size: "13sp"
             theme_text_color: "Error"
-            
 
-                
+
+
 <SuccessScreen>:
     name: 'success'
     MDFloatLayout:
@@ -354,7 +351,7 @@ ScreenManager:
                     size: self.size
                     pos: self.pos
                     radius: [4]
-    
+
 <SignupScreen>:
     name: 'signup'
     MDFloatLayout:
@@ -420,7 +417,7 @@ ScreenManager:
                 hint_text_color: 170/255, 170/255, 170/255, 1
                 padding: 13
                 cursor_color: 0, 0, 0, 1
-                
+
         MDFloatLayout:
             size_hint: .9 , .07
             pos_hint: {"center_x": .5, "center_y": .315}
@@ -448,7 +445,7 @@ ScreenManager:
                 hint_text_color: 170/255, 170/255, 170/255, 1
                 padding: 13
                 cursor_color: 0, 0, 0, 1
-                
+
             Button:
                 text: "Create Account"
                 size_hint: 1, 0.9
@@ -463,13 +460,13 @@ ScreenManager:
                         size: self.size
                         pos: self.pos 
                         radius: [4]
-                    
+
             MDTextButton:
                 text: "Back To Login"
                 pos_hint:{"center_x":0.5, "center_y": -3.5}
                 font_size: "13sp"
                 on_release: root.on_login()
-                
+
             MDLabel:
                 id: error_label
                 text: " "
@@ -482,8 +479,8 @@ ScreenManager:
                 markup: True
                 font_size: "13sp"
                 theme_text_color: "Error"
-                
-            
+
+
 
 <ForgotPasswordScreen>:
     name:'forgotPassword'
@@ -522,7 +519,7 @@ ScreenManager:
                 padding: 13
                 cursor_color: 0, 0, 0, 1
 
-        
+
             Button:
                 text: "Send Code to Email"
                 size_hint: 1, 0.9
@@ -537,14 +534,14 @@ ScreenManager:
                         pos: self.pos 
                         radius: [4]
                 on_release: root.send_reset_code(self)
-                        
+
             MDTextButton:
                 text: "Back To Login"
                 pos_hint:{"center_x":0.5, "center_y": -3.5}
                 font_size: "13sp"
                 on_release: root.on_login()
-                
-            
+
+
             MDLabel:
                 id: error_label
                 text: ""
@@ -557,7 +554,7 @@ ScreenManager:
                 markup: True
                 font_size: "13sp"
                 theme_text_color: "Error"
-                
+
 <ChangePasswordScreen>:
     name:'changePassword'
     MDFloatLayout:
@@ -566,7 +563,7 @@ ScreenManager:
             source: "logo.png"
             pos_hint: {"center_x": .5, "center_y": .70}
             size_hint: .5, .5
-            
+
         MDFloatLayout:
             size_hint: .9 , .07
             pos_hint: {"center_x": .5, "center_y": .5}
@@ -666,7 +663,7 @@ ScreenManager:
                         pos: self.pos 
                         radius: [4]
                 on_release: root.change_password(username.text, reset_code.text, new_password.text)
-                                
+
             MDLabel:
                 id: error_label
                 text: " "
@@ -679,11 +676,11 @@ ScreenManager:
                 markup: True
                 font_size: "13sp"
                 theme_text_color: "Error"
-            
 
-                
+
+
 """
-)
+                                   )
 
 
 if __name__ == '__main__':

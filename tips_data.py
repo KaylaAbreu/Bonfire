@@ -20,8 +20,10 @@ class AllTips(Screen):
         db_connect = mysql.connector.connect(
             host="localhost",
             user="root",
-            passwd="SoSweet.47",
-            database="bonfire_tips_db"
+            password="",
+            # password="SoSweet.47",
+            # database="bonfire_tips_db"
+            database="bonfire"
         )
         # Create cursor
         c = db_connect.cursor()
@@ -79,9 +81,11 @@ class MountainTips(Screen):
         self.manager.current = ''
         db_connect = mysql.connector.connect(
             user="root",
-            password="SoSweet.47",
+            password="",
+            # password="SoSweet.47",
             host="localhost",
-            database="bonfire_tips_db"
+            # database="bonfire_tips_db"
+            database="bonfire"
         )
         # Create cursor
         c = db_connect.cursor()
@@ -118,9 +122,11 @@ class PiedmontTips(Screen):
         self.manager.current = ''
         db_connect = mysql.connector.connect(
             user="root",
-            password="SoSweet.47",
+            password="",
+            # password="SoSweet.47",
             host="localhost",
-            database="bonfire_tips_db"
+            # database="bonfire_tips_db"
+            database="bonfire"
         )
         # Create cursor
         c = db_connect.cursor()
@@ -157,9 +163,11 @@ class CoastTips(Screen):
         self.manager.current = ''
         db_connect = mysql.connector.connect(
             user="root",
-            password="SoSweet.47",
+            # password="SoSweet.47",
+            password="",
             host="localhost",
-            database="bonfire_tips_db"
+            database="bonfire"
+            # database="bonfire_tips_db"
         )
         # Create cursor
         c = db_connect.cursor()
@@ -203,9 +211,11 @@ class Bonfire(MDApp, ScreenManager):
         # Connect to database
         db_connect = mysql.connector.connect(
             user="root",
-            password="SoSweet.47",
+            # password="SoSweet.47",
+            password="",
             host="localhost",
-            database="bonfire_tips_db"
+            # database="bonfire_tips_db"
+            database="bonfire"
         )
         # Create cursor
         c = db_connect.cursor()

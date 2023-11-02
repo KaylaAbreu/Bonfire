@@ -291,7 +291,7 @@
                 text_color: 44/255, 44/255, 4/255, 1 #gray
                 on_release:
                     root.manager.transition.direction = "left"
-                    root.manager.current = "ViewMtPostScreen"
+                    root.manager.current = "WelcomeMtScreen"
 
             MDRaisedButton:
                 md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
@@ -302,7 +302,7 @@
 
                 on_release:
                     root.manager.transition.direction = "left"
-                    root.manager.current = "ViewPtPostScreen"
+                    root.manager.current = "WelcomePtScreen"
 
             MDRaisedButton:
                 md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
@@ -313,7 +313,7 @@
 
                 on_release:
                     root.manager.transition.direction = "left"
-                    root.manager.current = "ViewCtPostScreen"
+                    root.manager.current = "WelcomeCtScreen"
 
             MDRaisedButton:
                 md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
@@ -324,7 +324,38 @@
                 on_release:
                     root.manager.transition.direction = "left"
                     root.manager.current = "UserPostScreen"
+<WelcomeMtScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Welcome to the Bonfire"
+            anchor_title: "left"
+            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+            Image:
+                source: "mountain.png"
+                pos_hint: {"center_x": .5, "center_y": .65}
+                size_hint: .7, .7
+                canvas:
+                    Color:
+                        rgb: 250/255, 250/255, 250/255, 1
+                canvas.before:
+                    Color:
+                        rgb: 217/255, 217/255, 217/255, 1
 
+            MDRaisedButton:
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                size_hint: .6, .07
+                pos_hint: {"center_x": .5, "center_y": .3}
+                text: "Mountain Bonfire Stories"
+                text_color: 44/255, 44/255, 4/255, 1 #gray
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "ViewMtPostScreen"
 <ViewMtPostScreen>:
     MDBoxLayout:
         md_bg_color: 250/255, 237/255, 202/255, 1  # White color in RGBA format
@@ -418,6 +449,68 @@
                 text: "Add Story"
                 on_press:
                     root.mt_submit()
+<MtCommentScreen>:
+    MDBoxLayout:
+        #md_bg_color: 0.996, 0.365, 0.149, 1  # Orange color in RGBA format
+        md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Mountain Comments"
+            anchor_title: "left"
+            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 79/255, 1  # light Orange color in RGBA format
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            Label:
+                id: post_label
+                text_size: self.size
+                align: "center"
+                valign: "middle"
+                font_size: 22
+                pos_hint: {"center_x": .6, "center_y": .8}
+        MDFloatLayout:
+            size_hint: .9, .7
+            pos_hint: {"center_x": .5, "center_y": .8}
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1 #1st box background color
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [4]
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1 #border color
+                Line:
+                    width:1.1 #border width
+                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+            TextInput:
+                id: post_input
+                hint_text: "Add Your Comment Here"
+                multiline: True
+                size_hint: 1, None
+                pos_hint: {"center_x": .5, "center_y": .78}
+                height: self.minimum_height
+                background_color: 1, 1, 1, 0
+                font_size: "14sp"
+                hint_text_color: 170/255, 170/255, 170/255, 1
+                padding:13
+                cursor_color: 0,0,0,1
+            #MDLabel:
+            #    pos_hint: {"center_x": 1.1, "center_y": -.15}
+            #    text: "[ Upload photo ]"
+            #   font_size: 19
+        MDFloatLayout:
+            MDRaisedButton:
+                pos_hint: {"center_x": .5, "center_y": .45}
+                size: (1, .5)
+                font_size: 32
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                text_color: 44/255, 44/255, 44/255, 1 #gray
+                text: "Add Comment"
+                on_press:
+                    root.mt_comment_submit()
 <ViewPtPostScreen>:
     MDBoxLayout:
         orientation: "vertical"
@@ -449,6 +542,38 @@
                 on_action_button:
                     root.manager.transition.direction = 'left'
                     root.manager.current = "AddPtPostScreen"
+<WelcomePtScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Welcome to the Bonfire"
+            anchor_title: "left"
+            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+            Image:
+                source: "piedmont.png"
+                pos_hint: {"center_x": .5, "center_y": .65}
+                size_hint: .7, .7
+                canvas:
+                    Color:
+                        rgb: 250/255, 250/255, 250/255, 1
+                canvas.before:
+                    Color:
+                        rgb: 217/255, 217/255, 217/255, 1
+
+            MDRaisedButton:
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                size_hint: .6, .07
+                pos_hint: {"center_x": .5, "center_y": .3}
+                text: "Piedmont Bonfire Stories"
+                text_color: 44/255, 44/255, 4/255, 1 #gray
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "ViewPtPostScreen"
 <AddPtPostScreen>:
     MDBoxLayout:
         md_bg_color: 250/255, 237/255, 202/255, 1 #off white
@@ -526,7 +651,6 @@
         MDScrollView:
             MDList:
                 id: ct_story_container
-
         MDBottomAppBar:
             md_bg_color: 248/255, 143/255, 79/255 #light orange
             MDTopAppBar:
@@ -542,6 +666,38 @@
                 on_action_button:
                     root.manager.transition.direction = 'left'
                     root.manager.current = "AddCtPostScreen"
+<WelcomeCtScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Welcome to the Bonfire"
+            anchor_title: "left"
+            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+            Image:
+                source: "coast.png"
+                pos_hint: {"center_x": .5, "center_y": .65}
+                size_hint: .7, .7
+                canvas:
+                    Color:
+                        rgb: 250/255, 250/255, 250/255, 1
+                canvas.before:
+                    Color:
+                        rgb: 217/255, 217/255, 217/255, 1
+
+            MDRaisedButton:
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                size_hint: .6, .07
+                pos_hint: {"center_x": .5, "center_y": .3}
+                text: "Piedmont Bonfire Stories"
+                text_color: 44/255, 44/255, 4/255, 1 #gray
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "ViewCtPostScreen"
 <AddCtPostScreen>:
     MDBoxLayout:
         md_bg_color: 250/255, 237/255, 202/255, 1 #offwhite
