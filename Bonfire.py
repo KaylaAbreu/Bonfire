@@ -1,5 +1,6 @@
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen, ScreenManager
-from kivy.core.text import LabelBase
+from kivy.core.text import LabelBase, Label
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.core.window import Window
@@ -9,11 +10,14 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import secrets
 import string
+from kivy.uix.label import Label
+from kivymd.uix.button import MDIconButton
 
 Window.size = (350, 580)
 
 
 class LoginScreen(Screen):
+
     def on_signup(self):
         # Switch to the SignupScreen
         self.manager.current = 'signup'
@@ -27,8 +31,10 @@ class LoginScreen(Screen):
         password = self.ids.password.text
 
         if self.check_credentials(username, password):
-
-            self.manager.current = 'success'
+            if username == "admin":
+                self.manager.current = 'admin'
+            else:
+                self.manager.current = 'allTips'
         else:
 
             self.ids.error_label.text = "Invalid username or password"
@@ -43,7 +49,85 @@ class LoginScreen(Screen):
         return result is not None
 
 
-class SuccessScreen(Screen):
+class AdminScreen(Screen):
+
+    def view_users(self):
+        users = self.get_users_from_database()
+
+        # Switch to the ViewUsersScreen and pass the list of users
+        view_users_screen = self.manager.get_screen('viewUsers')
+        view_users_screen.display_users(users)
+        self.manager.current = 'viewUsers'
+
+    def get_users_from_database(self):
+        app = MDApp.get_running_app()
+        query = "SELECT username FROM login"
+        app.cursor.execute(query)
+        users = [user[0] for user in app.cursor.fetchall()]
+        self.manager.get_screen('viewUsers').display_users(users)
+        return users
+
+    def delete_posts(self):
+        posts = self.get_posts_from_database()
+        delete_posts_screen = self.manager.get_screen('deletePosts')
+        delete_posts_screen.display_posts(posts)
+        self.manager.current = 'deletePosts'
+
+    def get_posts_from_database(self):
+        app = MDApp.get_running_app()
+        query = "SELECT username, content, location FROM posts"
+        app.cursor.execute(query)
+        posts = app.cursor.fetchall()
+        return posts
+
+    def on_logout(self):
+        self.manager.current = 'login'
+
+
+class ViewUsersScreen(Screen):
+
+    def display_users(self, users):
+        user_list = self.ids.user_list
+        user_list.clear_widgets()
+
+        for index, user in enumerate(users, start=1):
+            user_layout = BoxLayout(orientation='horizontal')
+            user_label = Label(
+                text=f"{index}. {user}",
+                font_size='20sp',
+                size_hint=(None, None),
+                size=('150dp', '30dp')
+            )
+            delete_button = MDIconButton(
+                icon="delete",
+                size_hint=(None, None),
+                size=('50dp', '40dp')
+            )
+
+            user_list.add_widget(user_layout)
+            user_layout.add_widget(user_label)
+            user_layout.add_widget(delete_button)
+
+    def on_back(self):
+        self.manager.current = 'admin'
+
+
+class DeletePostsScreen(Screen):
+    def display_posts(self, posts):
+        posts_list = self.ids.posts_list
+        posts_list.clear_widgets()
+
+        for posts in posts:
+            post_label = Label(text=f"Username: {posts[0]}\nContent: {posts[1]}\nLocation: {posts[2]}",
+                               font_size='15sp')
+            posts_list.add_widget(post_label)
+
+    def on_back(self):
+        self.manager.current = 'admin'
+
+
+class AllTips(Screen):
+
     def on_logout(self):
         self.manager.current = 'login'
 
@@ -55,7 +139,6 @@ class SignupScreen(Screen):
     def send_data(self, username, password, email):
         app = MDApp.get_running_app()
 
-        # Check if the username already exists in the database
         username_exists = self.check_username_exists(username.text)
 
         if username_exists:
@@ -217,8 +300,11 @@ ScreenManager:
     LoginScreen:
     SignupScreen:
     ForgotPasswordScreen:
-    SuccessScreen:
+    AllTips:
     ChangePasswordScreen:
+    AdminScreen:
+    ViewUsersScreen:
+    DeletePostsScreen:
 
 <LoginScreen>:
     name: 'login'
@@ -326,31 +412,212 @@ ScreenManager:
             font_size: "13sp"
             theme_text_color: "Error"
 
-
-
-<SuccessScreen>:
-    name: 'success'
+<AdminScreen>:
+    name: 'admin'
     MDFloatLayout:
         md_bg_color: 0.996, 0.365, 0.149, 1  # Orange color in RGBA format
-        Image:
-            source: "logo.png"
-            pos_hint: {"center_x": .5, "center_y": .70}
-            size_hint: .5, .5
+
+        Label:
+            text: "Administrator Page"
+            font_size: 23
+            color: 1, 1, 1, 1  # White text color (RGBA format)
+            halign: 'center'
+            valign: 'middle'
+            size_hint: 1, 0.1
+            pos_hint: {"center_x": 0.5, "center_y": 0.8}
+
+        Button:
+            text: "View Users"
+            size_hint: 0.4, 0.1
+            pos_hint: {"center_x": 0.5, "y": 0.6} 
+            background_color: 0, 0, 0, 1  # Black background color (RGBA format)
+            font_size: "15sp"
+            on_release: root.view_users()  # Define the view_users function
+
+        Button:
+            text: "Delete Posts"
+            size_hint: 0.4, 0.1
+            pos_hint: {"center_x": 0.5, "y": 0.4} 
+            background_color: 0, 0, 0, 1  # Black background color (RGBA format)
+            font_size: "15sp"
+            on_release: root.delete_posts()  # Define the delete_posts function
+
+        Button:
+            text: "Edit Tips"
+            size_hint: 0.4, 0.1
+            pos_hint: {"center_x": 0.5, "y": 0.2} 
+            background_color: 0, 0, 0, 1  # Black background color (RGBA format)
+            font_size: "15sp"
+            #on_release: root.edit_tips()  # Define the edit_tips function
 
         Button:
             text: "Logout"
-            size_hint: 1, 0.9
-            pos_hint: {"center_x": 0.5, "center_y": -0.70}
-            background_color: 128/255, 128/255, 128/255, 1
+            size_hint: 0.2, 0.1  # Adjusted size_hint
+            pos_hint: {"right": 1, "y": 0}  # Adjusted pos_hint
+            background_color: 0, 0, 0, 1 # Red background color (RGBA format)
             font_size: "15sp"
             on_release: root.on_logout()
+
+<ViewUsersScreen>:
+    name: 'viewUsers'
+
+    MDFloatLayout:
+        md_bg_color: 0.996, 0.365, 0.149, 1  # Orange color in RGBA format
+
+        ScrollView:  
+            size_hint: None, None
+            size: self.size
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+        BoxLayout:
+            orientation: 'vertical'
+            id: user_list
+            size_hint: None, None
+            size: self.minimum_size
+            pos_hint: {'center_x': 0.2, 'center_y': 0.6}
+
+            Label:
+                text: " "
+                size_hint: None, None
+                size: self.texture_size
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                font_size: '20sp'
+
+            GridLayout:
+                id: user_list
+                cols: 1
+                size_hint: None, None
+                size: self.minimum_size
+                spacing: dp(30)
+
+
+        Button:
+            text: "Back"
+            size_hint: 0.2, 0.1  # Adjusted size_hint
+            pos_hint: {"right": 1, "y": 0}  # Adjusted pos_hint
+            background_color: 0, 0, 0, 1  # Red background color (RGBA format)
+            font_size: "15sp"
+            on_release: root.on_back()
+
+<DeletePostsScreen>:
+    name: 'deletePosts'
+
+    MDFloatLayout:
+        md_bg_color: 0.996, 0.365, 0.149, 1  # Orange color in RGBA format
+
+        ScrollView:  # Wrap the BoxLayout with a ScrollView
+            size_hint: None, None
+            size: self.size
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: None, None
+            size: self.minimum_size
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+            Label:
+                text: " "
+                size_hint: None, None
+                size: self.texture_size
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                font_size: '24sp'
+
+            GridLayout:
+                id: posts_list
+                cols: 1
+                size_hint: None, None
+                size: self.minimum_size
+                spacing: dp(30)
+
+
+        Button:
+            text: "Back"
+            size_hint: 0.2, 0.1  # Adjusted size_hint
+            pos_hint: {"right": 1, "y": 0}  # Adjusted pos_hint
+            background_color: 0, 0, 0, 1  # Red background color (RGBA format)
+            font_size: "15sp"
+            on_release: root.on_back()
+
+
+
+<AllTips>:
+
+    name: 'allTips'
+
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "All Tips"
+            anchor_title: "left"
+            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1
             canvas.before:
                 Color:
-                    rgb: 154/255, 203/255, 247/255, 1
-                RoundedRectangle:
-                    size: self.size
-                    pos: self.pos
-                    radius: [4]
+                    rgb: 217/255, 217/255, 217/255, 1
+            MDScrollView:
+                MDList:
+                    id: all_tips_container
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .155, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "All Tips"
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "allTips"
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .385, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Mountain"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "mountainTips"
+    MDRaisedButton:
+        pos_hint: {"center_x": .63, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Piedmont"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "piedmontTips"
+    MDRaisedButton:
+        pos_hint: {"center_x": .85, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Coast"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "coastTips"
+
 
 <SignupScreen>:
     name: 'signup'
