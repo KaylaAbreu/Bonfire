@@ -55,6 +55,9 @@ class LoginScreen(Screen):
         values = (username, password)
         app.cursor.execute(query, values)
         result = app.cursor.fetchone()
+        if result:
+            self.user_ID = result[0]
+            self.current_user = username
         return result is not None
 
 class AdminScreen(Screen):
@@ -378,7 +381,7 @@ class WelcomeMtScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "success"
 
 
 class WelcomePtScreen(Screen):
@@ -398,7 +401,7 @@ class WelcomePtScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "success"
 
 
 class WelcomeCtScreen(Screen):
@@ -418,7 +421,7 @@ class WelcomeCtScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "success"
 
 
 class ViewMtPostScreen(Screen):
@@ -488,7 +491,7 @@ class ViewMtPostScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "success"
 
 
 class MtCommentScreen(Screen):
@@ -496,8 +499,8 @@ class MtCommentScreen(Screen):
     def mt_comment_submit(self):
         app = MDApp.get_running_app()
 
-        username = self.manager.get_screen('LoginScreen').current_user
-        user_ID = self.manager.get_screen('LoginScreen').user_ID
+        username = self.manager.get_screen('login').current_user
+        user_ID = self.manager.get_screen('login').user_ID
         # post_ID = self.manager.get_screen('ViewMtPostScreen').post_id
 
         # Check length of post
@@ -528,7 +531,7 @@ class MtCommentScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "success"
 
 class PtCommentScreen(Screen):
     post_id = None
@@ -536,8 +539,8 @@ class PtCommentScreen(Screen):
     def pt_comment_submit(self):
         app = MDApp.get_running_app()
 
-        username = self.manager.get_screen('LoginScreen').current_user
-        user_ID = self.manager.get_screen('LoginScreen').user_ID
+        username = self.manager.get_screen('login').current_user
+        user_ID = self.manager.get_screen('login').user_ID
         # post_ID = self.manager.get_screen('ViewMtPostScreen').post_id
 
         # Check length of post
@@ -568,7 +571,7 @@ class PtCommentScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "success"
 
 
 class CtCommentScreen(Screen):
@@ -577,8 +580,8 @@ class CtCommentScreen(Screen):
     def ct_comment_submit(self):
         app = MDApp.get_running_app()
 
-        username = self.manager.get_screen('LoginScreen').current_user
-        user_ID = self.manager.get_screen('LoginScreen').user_ID
+        username = self.manager.get_screen('login').current_user
+        user_ID = self.manager.get_screen('login').user_ID
         # post_ID = self.manager.get_screen('ViewMtPostScreen').post_id
 
         # Check length of post
@@ -609,7 +612,7 @@ class CtCommentScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "success"
 
 
 class ViewPtPostScreen(Screen):
@@ -690,7 +693,7 @@ class ViewPtPostScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "success"
 
 
 class ViewCtPostScreen(Screen):
@@ -772,15 +775,15 @@ class ViewCtPostScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "success"
 
 
 class AddMtPostScreen(Screen):
     def mt_submit(self):
         app = MDApp.get_running_app()
 
-        username = self.manager.get_screen('LoginScreen').current_user
-        user_ID = self.manager.get_screen('LoginScreen').user_ID
+        username = self.manager.get_screen('login').current_user
+        user_ID = self.manager.get_screen('login').user_ID
 
         # Check length of post
         if len(self.ids.post_input.text) == 0:
@@ -810,15 +813,15 @@ class AddMtPostScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "success"
 
 
 class AddPtPostScreen(Screen):
     def pt_submit(self):
         app = MDApp.get_running_app()
 
-        username = self.manager.get_screen('LoginScreen').current_user
-        user_ID = self.manager.get_screen('LoginScreen').user_ID
+        username = self.manager.get_screen('login').current_user
+        user_ID = self.manager.get_screen('login').user_ID
 
         # Check length of post
         if len(self.ids.post_input.text) == 0:
@@ -848,15 +851,15 @@ class AddPtPostScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "success"
 
 
 class AddCtPostScreen(Screen):
     def ct_submit(self):
         app = MDApp.get_running_app()
 
-        username = self.manager.get_screen('LoginScreen').current_user
-        user_ID = self.manager.get_screen('LoginScreen').user_ID
+        username = self.manager.get_screen('login').current_user
+        user_ID = self.manager.get_screen('login').user_ID
 
         # Check length of post
         if len(self.ids.post_input.text) == 0:
@@ -888,14 +891,14 @@ class AddCtPostScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "success"
 
 
 class UserPostScreen(Screen):
     def on_enter(self):
         app = MDApp.get_running_app()
 
-        username = self.manager.get_screen('LoginScreen').current_user
+        username = self.manager.get_screen('login').current_user
 
         # Get stories from database
         sql_command = "SELECT * FROM posts JOIN login ON posts.user_ID = login.user_ID WHERE login.username = %s"
@@ -904,6 +907,7 @@ class UserPostScreen(Screen):
 
         # Prevent repeats
         self.ids.user_story_container.clear_widgets()
+
         for i in stories:
             self.post_id = i[0]
             self.post_content = i[3]
@@ -952,28 +956,50 @@ class UserPostScreen(Screen):
         self.manager.current = "UserPostScreen"
 
     def remove_story(self, post):
-        app = MDApp.get_running_app()
+        # If yes button is pressed in dialog box, item will be deleted
+        def yes(instance):
+            app = MDApp.get_running_app()
 
-        sql_command = "DELETE FROM posts WHERE post_id = %s"
-        app.cursor.execute(sql_command, (post,))
-        app.database.commit()
+            sql_command = "DELETE FROM posts WHERE post_id = %s"
+            app.cursor.execute(sql_command, (post,))
+            app.database.commit()
 
-        # remove TwoListItem and Button
-        remove_container = []
-        for widget in self.ids.user_story_container.children:
-            if hasattr(widget, 'post_id') and widget.post_id == post:
-                remove_container.append(widget)
-            elif hasattr(widget, 'edit_id') and widget.edit_id == post:
-                remove_container.append(widget)
-            elif hasattr(widget, 'del_id') and widget.del_id == post:
-                remove_container.append(widget)
-        for widget in remove_container:
-            self.ids.user_story_container.remove_widget(widget)
-        self.manager.current = "UserPostScreen"
+            # remove TwoListItem and Button
+            remove_container = []
+            for widget in self.ids.user_story_container.children:
+                if hasattr(widget, 'post_id') and widget.post_id == post:
+                    remove_container.append(widget)
+                elif hasattr(widget, 'edit_id') and widget.edit_id == post:
+                    remove_container.append(widget)
+                elif hasattr(widget, 'del_id') and widget.del_id == post:
+                    remove_container.append(widget)
+            for widget in remove_container:
+                self.ids.user_story_container.remove_widget(widget)
+
+            self.dialog.dismiss()
+            self.on_enter()
+            self.manager.current = "UserPostScreen"
+
+        # If cancel button is pressed in dialog box, dialog box will close with no change
+        def cancel(instance):
+            self.dialog.dismiss()
+
+        self.dialog = MDDialog(
+                               text='Are you sure you want to delete this post?',
+                               type="custom",
+                               buttons=[
+                                   MDRectangleFlatButton(
+                                       text="Yes",
+                                       on_release=yes),
+                                   MDRectangleFlatButton(
+                                       text="Cancel",
+                                       on_release=cancel)
+                               ])
+        self.dialog.open()
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "success"
 
 
 class Bonfire(MDApp):
