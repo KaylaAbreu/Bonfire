@@ -465,7 +465,8 @@ class ViewMtPostScreen(Screen):
         dropdown = MDDropdownMenu(
             caller=self.ids.mt_story_container,
             items=menu_posts,
-            width_mult=4,
+            width_mult=10,
+            position="center",
         )
         dropdown.open()
 
@@ -1003,7 +1004,8 @@ class UserPostScreen(Screen):
 
 
 class Bonfire(MDApp):
-    database = mysql.connector.Connect(host="localhost", user="root", password="admin321", database="bonfire")
+    # database = mysql.connector.Connect(host="localhost", user="root", password="admin321", database="bonfire")
+    database = mysql.connector.Connect(host="localhost", user="root", password="", database="bonfire")
     cursor = database.cursor()
     cursor.execute("select * from login")
     for i in cursor.fetchall():
