@@ -9,7 +9,7 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.window import Window
 from kivymd.uix.dialog import MDDialog
-from kivymd.uix.list import TwoLineListItem, ThreeLineListItem, 
+from kivymd.uix.list import TwoLineListItem, ThreeLineListItem
 from kivymd.uix.button import MDRectangleFlatButton, MDIconButton
 from kivy.uix.button import Button
 import requests
