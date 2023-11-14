@@ -147,7 +147,7 @@
         MDTopAppBar:
             title: "User List"
             anchor_title: "left"
-            left_action_items: [["home", lambda x: root.callback()]] #implement
+            left_action_items: [["home", lambda x: root.on_back()]] #implement
             elevation: 1
             md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
             specific_text_color: 44/255, 44/255, 44/255, 1 #gray
@@ -252,7 +252,7 @@
             title: "Home"
             anchor_title: "left"
             left_action_items: [["home"]]
-            right_action_items: [["logout_icon.png", lambda x: root.on_logout()]]
+            right_action_items: [["logout", lambda x: root.on_logout()]]
             elevation: 1
             md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
             specific_text_color: 44/255, 44/255, 44/255, 1 #gray
@@ -1190,38 +1190,9 @@
                 on_press:
                     root.ct_comment_submit()
 <UserPostScreen>:
-    MDBoxLayout:
-        md_bg_color: 250/255, 237/255, 202/255, 1  # White color in RGBA formatS
-        orientation: "vertical"
-
-        MDTopAppBar:
-            title: "My Stories"
-            anchor_title: "left"
-            left_action_items: [["home", lambda x: root.callback()]] #implement
-            elevation: 1
-            #md_bg_color: "black"
-            md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
-            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
-
-        MDScrollView:
-            MDList:
-                id: user_story_container
-
-        MDRaisedButton:
-            pos_hint: {"center_x": .5, "center_y": .45}
-            size: (1, .5)
-            font_size: 32
-            #md_bg_color: 0.996, 0.365, 0.149
-            #md_bg_color: (255/255, 235/255, 228/255)
-            #md_bg_color: "black"
-            md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
-            #md_bg_color: 44/255, 44/255, 44/255, 1 #gray
-            #text_color: 227/255, 71/255, 16/255, 1
-            text_color: 44/255, 44/255, 44/255, 1
-            text: "Back"
-            on_press:
-                root.manager.transition.direction = "right"
-                root.manager.current = "SuccessScreen"
+    MDFloatLayout:
+        id:float
+        md_bg_color: 250/255, 237/255, 202/255, 1  # White color in RGBA format
 
 <AllTips>:
 
