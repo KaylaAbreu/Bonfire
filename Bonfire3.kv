@@ -715,36 +715,9 @@
                     root.manager.transition.direction = "left"
                     root.manager.current = "MountainTips"
 <ViewMtPostScreen>:
-    MDBoxLayout:
+    MDFloatLayout:
+        id: float
         md_bg_color: 250/255, 237/255, 202/255, 1  # White color in RGBA format
-        orientation: "vertical"
-        MDTopAppBar:
-            title: "Mountain Bonfire"
-            anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
-            elevation: 1
-            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
-            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
-
-
-        MDScrollView:
-            MDList:
-                id: mt_story_container
-
-        MDBottomAppBar:
-            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
-            MDTopAppBar:
-                title: "Share your story"
-                md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
-                elevation: 1
-                type: "bottom"
-                icon: "plus"
-                icon_color: 243/255, 132/255, 68/255, 1 #
-                mode: "end"
-                specific_text_color: 44/255, 44/255, 44/255, 1 #gray
-                on_action_button:
-                    root.manager.transition.direction = 'left'
-                    root.manager.current = "AddMtPostScreen"
 <AddMtPostScreen>:
     MDBoxLayout:
         #md_bg_color: 0.996, 0.365, 0.149, 1  # Orange color in RGBA format
