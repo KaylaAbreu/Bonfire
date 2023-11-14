@@ -147,7 +147,7 @@
         MDTopAppBar:
             title: "User List"
             anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            left_action_items: [["home", lambda x: root.callback()]] #implement
             elevation: 1
             md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
             specific_text_color: 44/255, 44/255, 44/255, 1 #gray
@@ -191,7 +191,7 @@
         MDTopAppBar:
             title: "Welcome to the Bonfire"
             anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            left_action_items: [["home", lambda x: root.callback()]] #implement
             elevation: 1
             md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
             specific_text_color: 44/255, 44/255, 44/255, 1 #gray
@@ -245,14 +245,61 @@
                 on_release:
                     root.manager.transition.direction = "left"
                     root.manager.current = "UserPostScreen"
+<MenuScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Home"
+            anchor_title: "left"
+            left_action_items: [["home"]]
+            right_action_items: [["logout_icon.png", lambda x: root.on_logout()]]
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1
 
+            MDRaisedButton:
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                size_hint: .6, .07
+                pos_hint: {"center_x": .5, "center_y": .7}
+                text: "Tips"
+                text_color: 44/255, 44/255, 4/255, 1 #gray
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "AllTips"
+            MDRaisedButton:
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                size_hint: .6, .07
+                pos_hint: {"center_x": .5, "center_y": .5}
+                text: "Bonfire Stories"
+                text_color: 44/255, 44/255, 4/255, 1 #gray
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "SuccessScreen"
+
+            MDRaisedButton:
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                size_hint: .6, .07
+                pos_hint: {"center_x": .5, "center_y": .3}
+                text: "Identify a Plant"
+                text_color: 44/255, 44/255, 4/255, 1 #gray
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "PlantSearch"
 <AdminDashScreen>:
     MDBoxLayout:
         orientation: "vertical"
         MDTopAppBar:
             title: "Welcome to the Bonfire"
             anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            left_action_items: [["home", lambda x: root.callback()]] #implement
             elevation: 1
             md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
             specific_text_color: 44/255, 44/255, 44/255, 1 #gray
@@ -637,7 +684,7 @@
         MDTopAppBar:
             title: "Welcome to the Bonfire"
             anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            left_action_items: [["home", lambda x: root.callback()]] #implement
             elevation: 1
             md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
             specific_text_color: 44/255, 44/255, 44/255, 1 #gray
@@ -679,7 +726,7 @@
         MDTopAppBar:
             title: "Welcome to the Bonfire"
             anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            left_action_items: [["home", lambda x: root.callback()]] #implement
             elevation: 1
             md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
             specific_text_color: 44/255, 44/255, 44/255, 1 #gray
@@ -714,67 +761,53 @@
                 on_release:
                     root.manager.transition.direction = "left"
                     root.manager.current = "MountainTips"
+
 <ViewMtPostScreen>:
     MDFloatLayout:
         id: float
         md_bg_color: 250/255, 237/255, 202/255, 1  # White color in RGBA format
+
 <AddMtPostScreen>:
     MDBoxLayout:
-        #md_bg_color: 0.996, 0.365, 0.149, 1  # Orange color in RGBA format
         md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
         orientation: "vertical"
+
         MDTopAppBar:
             title: "Mountain Bonfire"
             anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            left_action_items: [["home", lambda x: root.callback()]] #implement
             elevation: 1
             md_bg_color: 248/255, 143/255, 79/255, 1  # light Orange color in RGBA format
             specific_text_color: 44/255, 44/255, 44/255, 1 #gray
         MDFloatLayout:
-            Label:
+            Image:
+                source: "logo2.png"
+                pos_hint: {"center_x": .5, "center_y": .85}
+                size_hint: None, None
+                width: 200
+                height: 200
+                padding: 10
+            MDLabel:
                 id: post_label
-                text_size: self.size
-                align: "center"
-                valign: "middle"
-                font_size: 22
-                pos_hint: {"center_x": .6, "center_y": .8}
-        MDFloatLayout:
-            size_hint: .9, .7
-            pos_hint: {"center_x": .5, "center_y": .8}
-            canvas:
-                Color:
-                    rgb: 250/255, 250/255, 250/255, 1 #1st box background color
-                RoundedRectangle:
-                    #size: self.size
-                    size: self.size
-                    pos: self.pos
-                    radius: [4]
-
-            canvas.before:
-                Color:
-                    rgb: 217/255, 217/255, 217/255, 1 #border color
-                Line:
-                    width:1.1 #border width
-                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+                pos_hint: {"center_x": .5, "center_y": .8}
             TextInput:
                 id: post_input
                 hint_text: "Share your story around the Bonfire"
                 multiline: True
-                size_hint: 1, None
-                pos_hint: {"center_x": .5, "center_y": .78}
-                height: self.minimum_height
-                background_color: 1, 1, 1, 0
-                font_size: "14sp"
-                hint_text_color: 170/255, 170/255, 170/255, 1
-                padding:13
+                size_hint_y: None
+                height: 400
+                pos_hint: {"center_x": .5, "center_y": .45}
+                font_size: "19sp"
+                #hint_text_color: 170/255, 170/255, 170/255, 1
                 cursor_color: 0,0,0,1
+                #hint_text_color: 0.5, 0.5, 0.5, 1  # Set the hint text color to a dark gray
+
             #MDLabel:
             #    pos_hint: {"center_x": 1.1, "center_y": -.15}
             #    text: "[ Upload photo ]"
             #   font_size: 19
-        MDFloatLayout:
             MDRaisedButton:
-                pos_hint: {"center_x": .5, "center_y": .45}
+                pos_hint: {"center_x": .5, "center_y": .1}
                 size: (1, .5)
                 font_size: 32
                 md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
@@ -790,7 +823,7 @@
         MDTopAppBar:
             title: "Mountain Comments"
             anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            left_action_items: [["home", lambda x: root.callback()]] #implement
             elevation: 1
             md_bg_color: 248/255, 143/255, 79/255, 1  # light Orange color in RGBA format
             specific_text_color: 44/255, 44/255, 44/255, 1 #gray
@@ -845,43 +878,17 @@
                 on_press:
                     root.mt_comment_submit()
 <ViewPtPostScreen>:
-    MDBoxLayout:
-        orientation: "vertical"
-        md_bg_color: 250/255, 237/255, 202/255, 1 #offwhite
-        MDTopAppBar:
-            title: "Piedmont Bonfire"
-            anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
-            elevation: 1
-            md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
-            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+    MDFloatLayout:
+        id: float
+        md_bg_color: 250/255, 237/255, 202/255, 1  # White color in RGBA format
 
-
-        MDScrollView:
-            MDList:
-                id: pt_story_container
-
-        MDBottomAppBar:
-            md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
-            MDTopAppBar:
-                title: "Share your story"
-                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
-                elevation: 1
-                type: "bottom"
-                icon: "plus"
-                icon_color: 243/255, 132/255, 68/255, 1
-                mode: "end"
-                specific_text_color: 44/255, 44/255, 44/255, 1
-                on_action_button:
-                    root.manager.transition.direction = 'left'
-                    root.manager.current = "AddPtPostScreen"
 <WelcomePtScreen>:
     MDBoxLayout:
         orientation: "vertical"
         MDTopAppBar:
             title: "Welcome to the Bonfire"
             anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            left_action_items: [["home", lambda x: root.callback()]] #implement
             elevation: 1
             md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
             specific_text_color: 44/255, 44/255, 44/255, 1 #gray
@@ -918,59 +925,45 @@
                     root.manager.current = "PiedmontTips"
 <AddPtPostScreen>:
     MDBoxLayout:
-        md_bg_color: 250/255, 237/255, 202/255, 1 #off white
+        md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
         orientation: "vertical"
+
         MDTopAppBar:
             title: "Piedmont Bonfire"
             anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            left_action_items: [["home", lambda x: root.callback()]] #implement
             elevation: 1
-            md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+            md_bg_color: 248/255, 143/255, 79/255, 1  # light Orange color in RGBA format
             specific_text_color: 44/255, 44/255, 44/255, 1 #gray
         MDFloatLayout:
-            Label:
+            Image:
+                source: "logo2.png"
+                pos_hint: {"center_x": .5, "center_y": .85}
+                size_hint: None, None
+                width: 200
+                height: 200
+                padding: 10
+            MDLabel:
                 id: post_label
-                text_size: self.size
-                align: "center"
-                valign: "middle"
-                font_size: 22
-                pos_hint: {"center_x": .6, "center_y": .8}
-        MDFloatLayout:
-            size_hint: .9, .7
-            pos_hint: {"center_x": .5, "center_y": .8}
-            canvas:
-                Color:
-                    rgb: 250/255, 250/255, 250/255, 1 #1st box background color
-                RoundedRectangle:
-                    size: self.size
-                    pos: self.pos
-                    radius: [4]
-            canvas.before:
-                Color:
-                    rgb: 217/255, 217/255, 217/255, 1 #border color
-                Line:
-                    width:1.1 #border width
-                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+                pos_hint: {"center_x": .5, "center_y": .8}
             TextInput:
                 id: post_input
                 hint_text: "Share your story around the Bonfire"
                 multiline: True
-                size_hint: 1, None
-                pos_hint: {"center_x": .5, "center_y": .78}
-                height: self.minimum_height
-                background_color: 1, 1, 1, 0
-                font_size: "14sp"
-                #add font here#
-                hint_text_color: 170/255, 170/255, 170/255, 1
-                padding:13
+                size_hint_y: None
+                height: 400
+                pos_hint: {"center_x": .5, "center_y": .45}
+                font_size: "19sp"
+                #hint_text_color: 170/255, 170/255, 170/255, 1
                 cursor_color: 0,0,0,1
+                #hint_text_color: 0.5, 0.5, 0.5, 1  # Set the hint text color to a dark gray
+
             #MDLabel:
             #    pos_hint: {"center_x": 1.1, "center_y": -.15}
             #    text: "[ Upload photo ]"
             #   font_size: 19
-        MDFloatLayout:
             MDRaisedButton:
-                pos_hint: {"center_x": .5, "center_y": .45}
+                pos_hint: {"center_x": .5, "center_y": .1}
                 size: (1, .5)
                 font_size: 32
                 md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
@@ -986,7 +979,7 @@
         MDTopAppBar:
             title: "Piedmont Comments"
             anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            left_action_items: [["home", lambda x: root.callback()]] #implement
             elevation: 1
             md_bg_color: 248/255, 143/255, 79/255, 1  # light Orange color in RGBA format
             specific_text_color: 44/255, 44/255, 44/255, 1 #gray
@@ -1041,42 +1034,17 @@
                 on_press:
                     root.pt_comment_submit()
 <ViewCtPostScreen>:
-    MDBoxLayout:
-        md_bg_color: 250/255, 237/255, 202/255, 1 #offwhite
-        orientation: "vertical"
-        MDTopAppBar:
-            title: "Coastal Bonfire"
-            anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
-            elevation: 1
-            md_bg_color: 248/255, 143/255, 79/255 #light orange
-            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+    MDFloatLayout:
+        id: float
+        md_bg_color: 250/255, 237/255, 202/255, 1  # White color in RGBA format
 
-        MDScrollView:
-            MDList:
-                id: ct_story_container
-        MDBottomAppBar:
-            md_bg_color: 248/255, 143/255, 79/255 #light orange
-            MDTopAppBar:
-                title: "Share your story"
-                md_bg_color: 248/255, 143/255, 79/255 #light orange
-                elevation: 1
-                type: "bottom"
-                icon: "plus"
-                #icon_color: "black"
-                icon_color: 243/255, 132/255, 68/255, 1
-                mode: "end"
-                specific_text_color: 44/255, 44/255, 44/255, 1
-                on_action_button:
-                    root.manager.transition.direction = 'left'
-                    root.manager.current = "AddCtPostScreen"
 <WelcomeCtScreen>:
     MDBoxLayout:
         orientation: "vertical"
         MDTopAppBar:
             title: "Welcome to the Bonfire"
             anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            left_action_items: [["home", lambda x: root.callback()]] #implement
             elevation: 1
             md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
             specific_text_color: 44/255, 44/255, 44/255, 1 #gray
@@ -1113,66 +1081,48 @@
                     root.manager.current = "CoastTips"
 <AddCtPostScreen>:
     MDBoxLayout:
-        md_bg_color: 250/255, 237/255, 202/255, 1 #offwhite
+        md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
         orientation: "vertical"
+
         MDTopAppBar:
             title: "Coastal Bonfire"
             anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            left_action_items: [["home", lambda x: root.callback()]] #implement
             elevation: 1
-            md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+            md_bg_color: 248/255, 143/255, 79/255, 1  # light Orange color in RGBA format
             specific_text_color: 44/255, 44/255, 44/255, 1 #gray
         MDFloatLayout:
-            Label:
+            Image:
+                source: "logo2.png"
+                pos_hint: {"center_x": .5, "center_y": .85}
+                size_hint: None, None
+                width: 200
+                height: 200
+                padding: 10
+            MDLabel:
                 id: post_label
-                text_size: self.size
-                align: "center"
-                valign: "middle"
-                font_size: 22
-                pos_hint: {"center_x": .6, "center_y": .8}
-        MDFloatLayout:
-            size_hint: .9, .7
-            pos_hint: {"center_x": .5, "center_y": .8}
-            canvas:
-                Color:
-                    rgb: 250/255, 250/255, 250/255, 1 #1st box background color
-                RoundedRectangle:
-                    size: self.size
-                    pos: self.pos
-                    radius: [4]
-            canvas.before:
-                Color:
-                    rgb: 217/255, 217/255, 217/255, 1 #border color
-                Line:
-                    width:1.1 #border width
-                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+                pos_hint: {"center_x": .5, "center_y": .8}
             TextInput:
                 id: post_input
                 hint_text: "Share your story around the Bonfire"
                 multiline: True
-                size_hint: 1, None
-                pos_hint: {"center_x": .5, "center_y": .78}
-                height: self.minimum_height
-                background_color: 1, 1, 1, 0
-                font_size: "14sp"
-                #add font here#
-                hint_text_color: 170/255, 170/255, 170/255, 1
-                padding:13
+                size_hint_y: None
+                height: 400
+                pos_hint: {"center_x": .5, "center_y": .45}
+                font_size: "19sp"
+                #hint_text_color: 170/255, 170/255, 170/255, 1
                 cursor_color: 0,0,0,1
+                #hint_text_color: 0.5, 0.5, 0.5, 1  # Set the hint text color to a dark gray
+
             #MDLabel:
             #    pos_hint: {"center_x": 1.1, "center_y": -.15}
             #    text: "[ Upload photo ]"
             #   font_size: 19
-        MDFloatLayout:
             MDRaisedButton:
-                pos_hint: {"center_x": .5, "center_y": .45}
+                pos_hint: {"center_x": .5, "center_y": .1}
                 size: (1, .5)
                 font_size: 32
-                #md_bg_color: 0.996, 0.365, 0.149
-                #md_bg_color: (255/255, 235/255, 228/255)
-                #md_bg_color: "black"
                 md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
-                #text_color: 227/255, 71/255, 16/255, 1
                 text_color: 44/255, 44/255, 44/255, 1 #gray
                 text: "Add Story"
                 on_press:
@@ -1185,7 +1135,7 @@
         MDTopAppBar:
             title: "Coastal Comments"
             anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            left_action_items: [["home", lambda x: root.callback()]] #implement
             elevation: 1
             md_bg_color: 248/255, 143/255, 79/255, 1  # light Orange color in RGBA format
             specific_text_color: 44/255, 44/255, 44/255, 1 #gray
@@ -1245,9 +1195,9 @@
         orientation: "vertical"
 
         MDTopAppBar:
-            title: "Stories"
+            title: "My Stories"
             anchor_title: "left"
-            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            left_action_items: [["home", lambda x: root.callback()]] #implement
             elevation: 1
             #md_bg_color: "black"
             md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
@@ -1273,3 +1223,344 @@
                 root.manager.transition.direction = "right"
                 root.manager.current = "SuccessScreen"
 
+<AllTips>:
+
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+
+        MDTopAppBar:
+            title: "All Tips"
+            anchor_title: "left"
+            left_action_items: [["home", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+
+
+        MDScrollView:
+            pos_hint: {"top": 0.7}
+
+            MDList:
+                id: all_tips_container
+
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .155, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "All Tips"
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "AllTips"
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .385, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Mountain"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "MountainTips"
+    MDRaisedButton:
+        pos_hint: {"center_x": .63, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Piedmont"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "PiedmontTips"
+    MDRaisedButton:
+        pos_hint: {"center_x": .85, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Coast"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "CoastTips"
+
+<MountainTips>:
+
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+
+        MDTopAppBar:
+            title: "Mountain Adventure Tips"
+            anchor_title: "left"
+            left_action_items: [["home", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1
+        MDFloatLayout:
+
+
+        MDScrollView:
+            pos_hint: {"top": 0.7}
+
+            MDList:
+                id: mountain_tips_container
+
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .155, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "All Tips"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "AllTips"
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .385, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Mountain"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "MountainTips"
+    MDRaisedButton:
+        pos_hint: {"center_x": .63, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Piedmont"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "PiedmontTips"
+    MDRaisedButton:
+        pos_hint: {"center_x": .85, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Coast"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "CoastTips"
+
+<PiedmontTips>:
+
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+
+        MDTopAppBar:
+            title: "Piedmont Adventure Tips"
+            anchor_title: "left"
+            left_action_items: [["home", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+
+
+        MDScrollView:
+            pos_hint: {"top": 0.7}
+
+            MDList:
+                id: piedmont_tips_container
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .155, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "All Tips"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "AllTips"
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .385, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Mountain"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "MountainTips"
+    MDRaisedButton:
+        pos_hint: {"center_x": .63, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Piedmont"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "PiedmontTips"
+    MDRaisedButton:
+        pos_hint: {"center_x": .85, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Coast"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "CoastTips"
+
+<CoastTips>:
+
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+
+        MDTopAppBar:
+            title: "Coastal Adventure Tips"
+            anchor_title: "left"
+            left_action_items: [["home", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+
+
+        MDScrollView:
+            pos_hint: {"top": 0.7}
+
+            MDList:
+                id: coast_tips_container
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .155, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "All Tips"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "AllTips"
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .385, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Mountain"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "MountainTips"
+    MDRaisedButton:
+        pos_hint: {"center_x": .63, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Piedmont"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "PiedmontTips"
+    MDRaisedButton:
+        pos_hint: {"center_x": .85, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Coast"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "CoastTips"
+<PlantSearch>:
+
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Identify a Plant"
+            anchor_title: "left"
+            left_action_items: [["home", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1
+    MDRaisedButton:
+        pos_hint: {"center_x": .5, "center_y": .15}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Search"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.capture()

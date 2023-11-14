@@ -46,7 +46,7 @@ class LoginScreen(Screen):
             if username == "admin":
                 self.manager.current = 'AdminScreen'
             else:
-                self.manager.current = 'SuccessScreen'
+                self.manager.current = 'MenuScreen'
         else:
 
             self.ids.error_label.text = "Invalid username or password"
@@ -283,6 +283,9 @@ class ForgotPasswordScreen(Screen):
 class SuccessScreen(Screen):
     def on_logout(self):
         self.manager.current = 'LoginScreen'
+    def callback(self):
+        self.manager.transition.direction = "right"
+        self.manager.current = "MenuScreen"
 
 class AdminDashScreen(Screen):
     pass
@@ -319,8 +322,12 @@ class ChangePasswordScreen(Screen):
         app.cursor.execute("UPDATE login SET reset_code = NULL WHERE username = %s", (username,))
         app.database.commit()
 
-
-
+class MenuScreen(Screen):
+    def on_logout(self):
+        clear_login = self.manager.get_screen('LoginScreen')
+        clear_login.ids.username.text = ""
+        clear_login.ids.password.text = ""
+        self.manager.current = 'LoginScreen'
 class Alerts():
     def __init__(self):
         # Initialize headlines for dialog box in Welcome Screens
@@ -409,7 +416,7 @@ class WelcomeMtScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "MenuScreen"
 
 
 class WelcomePtScreen(Screen):
@@ -429,7 +436,7 @@ class WelcomePtScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "MenuScreen"
 
 
 class WelcomeCtScreen(Screen):
@@ -449,7 +456,7 @@ class WelcomeCtScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "MenuScreen"
 
 
 class ViewMtPostScreen(Screen):
@@ -463,7 +470,7 @@ class ViewMtPostScreen(Screen):
         # Top Navigation Bar
         top_bar = (MDTopAppBar(title="Mountain Bonfire",
                                anchor_title="left",
-                               left_action_items=[["menu", lambda x: self.callback]],
+                               left_action_items=[["menu", lambda x: self.callback()]],
                                elevation=1,
                                md_bg_color=[248 / 255, 143 / 255, 70 / 255, 1],
                                specific_text_color=[44 / 255, 44 / 255, 44 / 255, 1],
@@ -604,7 +611,7 @@ class ViewMtPostScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "success"
+        self.manager.current = "MenuScreen"
 
 
 class MtCommentScreen(Screen):
@@ -644,7 +651,7 @@ class MtCommentScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "MenuScreen"
 
 class PtCommentScreen(Screen):
     post_id = None
@@ -684,7 +691,7 @@ class PtCommentScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "MenuScreen"
 
 
 class CtCommentScreen(Screen):
@@ -725,160 +732,299 @@ class CtCommentScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "MenuScreen"
 
 
 class ViewPtPostScreen(Screen):
     def on_enter(self):
-        app = MDApp.get_running_app()
-        # Get stories from database
-        app.cursor.execute("SELECT * FROM posts WHERE location = 'piedmont'")
-        stories = app.cursor.fetchall()
+        story_app = MDApp.get_running_app()
+        com_app = MDApp.get_running_app()
+
+        story_app.cursor.execute("SELECT * FROM posts WHERE location = 'piedmont'")
+        stories = story_app.cursor.fetchall()
+
+        # Top Navigation Bar
+        top_bar = (MDTopAppBar(title="Piedmont Bonfire",
+                               anchor_title="left",
+                               left_action_items=[["menu", lambda x: self.callback()]],
+                               elevation=1,
+                               md_bg_color=[248 / 255, 143 / 255, 70 / 255, 1],
+                               specific_text_color=[44 / 255, 44 / 255, 44 / 255, 1],
+                               pos_hint={"top": 1}
+
+                               ))
+        # Message Label
+        message = Label(text="Check out what people are saying around the Bonfire",
+                        pos_hint={"top": 0.85},  # places widget at top of parent
+                        size_hint_y=None,
+                        valign="top",
+                        color=(0, 0, 0, 1),
+                        size=(350, 100),  # Forces size of label
+                        text_size=(500, None),  # Allows text to wrap
+                        padding=(3, 3),
+                        halign="center",
+                        font_size='19sp'
+                        )
+        scroll = MDScrollView(size_hint=(1, 0.547),
+                              pos_hint={"top": 0.7})  # size_hint adjusts the container size of the scroll
+
+        layout2 = MDBoxLayout(orientation='vertical', size_hint_y=None, spacing=20)
+        layout2.bind(minimum_height=layout2.setter('height'))  # Needed to dynamically add/delete from scrollview
 
         # Prevent repeats
-        self.ids.pt_story_container.clear_widgets()
+        self.ids.float.clear_widgets()
 
-        # Populate MDList with username and post content
         for i in stories:
             post_id = i[0]
             post_user = i[2]
             post_body = i[3]
 
-            post_display = TwoLineListItem(
-                text=post_user,
-                secondary_text=post_body,
-                on_release=lambda x, post_id=post_id: self.open_comments(post_id),
+            # Display user icon and username
+            header = OneLineAvatarListItem(ImageLeftWidget(source="img.png"),
+                                           text=post_user,
+                                           bg_color=(248 / 255, 143 / 255, 70 / 255, 1),
+                                           )
+            # post content
+            label = Label(
+                text=post_body,
+                color=(0, 0, 0, 1),
+                size_hint_y=None,
+                size=(340, 200),
+                text_size=(450, None),  # Allow text wrapping
+                padding=(1, 1),
+                halign="left",
+                valign="top",
             )
-            expand_button = MDRectangleFlatButton(text="View Story",
-                                                  pos_hint={'center_x': 0.8},
-                                                  text_color="black")
-            expand_button.bind(
-                on_release=lambda instance, post_id=post_id, post_body=post_body: self.expand_story(post_id, post_body))
-            self.ids.pt_story_container.add_widget(expand_button)
-            self.ids.pt_story_container.add_widget(post_display)
-            # expand_button = MDRectangleFlatButton(text="More",
-            #                                       pos_hint={'center_x': 0.8},
-            #                                       text_color="black")
-            # expand_button.bind(on_release=lambda instance, post=i[3]: self.expand_story(post))
-            # self.ids.pt_story_container.add_widget(expand_button)
-            # self.ids.pt_story_container.add_widget(TwoLineListItem(text=f'{i[2]}', secondary_text=f'{i[3]}'))
 
-    def open_comments(self, post_id):
-        app = MDApp.get_running_app()
-        app.cursor.execute("SELECT * FROM comments WHERE post_ID = %s", (post_id,))
-        comments = app.cursor.fetchall()
+            comment_btn = MDRectangleFlatButton(md_bg_color=(248 / 255, 143 / 255, 70 / 255, 0.5),
+                                                text="Add Comment",
+                                                text_color=(0, 0, 0, 1),
+                                                size_hint_y=None,
+                                                height=40,
+                                                pos_hint={'center_x': 0.5, 'center_y': 0.1},
+                                                on_release=(lambda instance, post_id=post_id,
+                                                                   post_body=post_body: self.expand_story(post_id,
+                                                                                                          post_body))
+                                                )
+            layout2.add_widget(header)
+            layout2.add_widget(label)
+            layout2.add_widget(comment_btn)
 
-        menu_posts = [
-            {
-                "viewclass": "TwoLineListItem",
-                "text": comment[3],
-                "secondary_text": comment[4],
-                "on_release": lambda x=comment[4]: dropdown.dismiss(),
-            }
-            for comment in comments
-        ]
-        dropdown = MDDropdownMenu(
-            caller=self.ids.pt_story_container,
-            items=menu_posts,
-            width_mult=4,
-        )
-        dropdown.open()
+            com_app.cursor.execute("SELECT * FROM comments WHERE post_ID = %s", (post_id,))
+            comments = com_app.cursor.fetchall()
 
-    def menu_callback(self, instance):
-        instance.dismiss()
+            layout3 = MDBoxLayout(orientation='vertical', size_hint_y=None)
+            layout3.bind(minimum_height=layout3.setter('height'))
+
+            for c in comments:
+                com_id = c[1]
+                com_user = c[3]
+                com_body = c[4]
+
+                header2 = OneLineRightIconListItem(ImageRightWidget(source="img.png"),
+                                                   text=com_user,
+                                                   bg_color=(248 / 255, 143 / 255, 70 / 255, 0.5))
+
+                label2 = Label(
+                    text=com_body,
+                    size_hint_y=None,
+                    color=(0, 0, 0, 1),
+                    size=(300, 300),
+                    text_size=(300, None),
+                    padding=(5, 5),
+                    halign="left",
+                    valign="top"
+                )
+
+                layout3.add_widget(header2)
+                layout3.add_widget(label2)
+
+            layout2.add_widget(layout3)
+
+        scroll.add_widget(layout2)
+
+        add_btn = MDRectangleFlatButton(md_bg_color=(248 / 255, 143 / 255, 70 / 255, 1),
+                                        text="Share your story",
+                                        text_color=(0, 0, 0, 1),
+                                        pos_hint={'center_x': 0.5, 'center_y': 0.1},
+                                        on_release=self.add_mt_story
+                                        )
+        # add everything to parent widget (Float Layout) in .kv file
+        self.ids.float.add_widget(top_bar)
+        self.ids.float.add_widget(message)
+        self.ids.float.add_widget(scroll)
+        self.ids.float.add_widget(add_btn)
+
+    def add_mt_story(self, touch):
+        print("add story")
+        self.manager.current = "AddPtPostScreen"
 
     def expand_story(self, post_id, post_body):
-        self.dialog = MDDialog(text=post_body,
+        self.dialog = MDDialog(text=f'Story: {post_body}',
                                buttons=[
                                    MDRectangleFlatButton(
                                        text="Add Comment",
-                                       pos_hint={"center_x":0.5, "center_y":0.5},
-                                       on_release=lambda instance, post_id=post_id: self.add_pt_comment(post_id)
+                                       pos_hint={"center_x": 0.1, "center_y": 0.5},
+                                       on_release=lambda instance, post_id=post_id: self.add_mt_comment(post_id)
+                                   ),
+                                   MDRectangleFlatButton(
+                                       text="Cancel",
+                                       pos_hint={"center_x": 0.6, "center_y": 0.5},
+                                       on_release=lambda x: self.dialog.dismiss()
                                    )
                                ]
                                )
         self.dialog.open()
 
-    def add_pt_comment(self, post_id):
+    def add_mt_comment(self, post_id):
         self.dialog.dismiss()
         self.manager.get_screen('PtCommentScreen').post_id = post_id
         self.manager.current = "PtCommentScreen"
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "MenuScreen"
 
 
 class ViewCtPostScreen(Screen):
     def on_enter(self):
-        app = MDApp.get_running_app()
+        story_app = MDApp.get_running_app()
+        com_app = MDApp.get_running_app()
 
-        # Get stories from database
-        app.cursor.execute("SELECT * FROM posts WHERE location = 'coast'")
-        stories = app.cursor.fetchall()
+        story_app.cursor.execute("SELECT * FROM posts WHERE location = 'coast'")
+        stories = story_app.cursor.fetchall()
+
+        # Top Navigation Bar
+        top_bar = (MDTopAppBar(title="Coastal Bonfire",
+                               anchor_title="left",
+                               left_action_items=[["menu", lambda x: self.callback()]],
+                               elevation=1,
+                               md_bg_color=[248 / 255, 143 / 255, 70 / 255, 1],
+                               specific_text_color=[44 / 255, 44 / 255, 44 / 255, 1],
+                               pos_hint={"top": 1}
+
+                               ))
+        # Message Label
+        message = Label(text="Check out what people are saying around the Bonfire",
+                        pos_hint={"top": 0.85},  # places widget at top of parent
+                        size_hint_y=None,
+                        valign="top",
+                        color=(0, 0, 0, 1),
+                        size=(350, 100),  # Forces size of label
+                        text_size=(500, None),  # Allows text to wrap
+                        padding=(3, 3),
+                        halign="center",
+                        font_size='19sp'
+                        )
+        scroll = MDScrollView(size_hint=(1, 0.547),
+                              pos_hint={"top": 0.7})  # size_hint adjusts the container size of the scroll
+
+        layout2 = MDBoxLayout(orientation='vertical', size_hint_y=None, spacing=20)
+        layout2.bind(minimum_height=layout2.setter('height'))  # Needed to dynamically add/delete from scrollview
 
         # Prevent repeats
-        self.ids.ct_story_container.clear_widgets()
+        self.ids.float.clear_widgets()
 
-        # Populate MDList with username and post content
         for i in stories:
             post_id = i[0]
             post_user = i[2]
             post_body = i[3]
 
-            post_display = TwoLineListItem(
-                text=post_user,
-                secondary_text=post_body,
-                on_release=lambda x, post_id=post_id: self.open_comments(post_id),
+            # Display user icon and username
+            header = OneLineAvatarListItem(ImageLeftWidget(source="img.png"),
+                                           text=post_user,
+                                           bg_color=(248 / 255, 143 / 255, 70 / 255, 1),
+                                           )
+            # post content
+            label = Label(
+                text=post_body,
+                color=(0, 0, 0, 1),
+                size_hint_y=None,
+                size=(340, 200),
+                text_size=(450, None),  # Allow text wrapping
+                padding=(1, 1),
+                halign="left",
+                valign="top",
             )
-            expand_button = MDRectangleFlatButton(text="View Story",
-                                                  pos_hint={'center_x': 0.8},
-                                                  text_color="black")
-            expand_button.bind(
-                on_release=lambda instance, post_id=post_id, post_body=post_body: self.expand_story(post_id, post_body))
-            self.ids.ct_story_container.add_widget(expand_button)
-            self.ids.ct_story_container.add_widget(post_display)
-            # expand_button = MDRectangleFlatButton(text="More",
-            #                                pos_hint={'center_x': 0.8},
-            #                                text_color="black")
-            # expand_button.bind(on_release=lambda instance, post=i[3]: self.expand_story(post))
-            # self.ids.ct_story_container.add_widget(expand_button)
-            # self.ids.ct_story_container.add_widget(TwoLineListItem(text=f'{i[2]}', secondary_text=f'{i[3]}'))
 
-    def open_comments(self, post_id):
-        app = MDApp.get_running_app()
-        app.cursor.execute("SELECT * FROM comments WHERE post_ID = %s", (post_id,))
-        comments = app.cursor.fetchall()
+            comment_btn = MDRectangleFlatButton(md_bg_color=(248 / 255, 143 / 255, 70 / 255, 0.5),
+                                                text="Add Comment",
+                                                text_color=(0, 0, 0, 1),
+                                                size_hint_y=None,
+                                                height=40,
+                                                pos_hint={'center_x': 0.5, 'center_y': 0.1},
+                                                on_release=(lambda instance, post_id=post_id,
+                                                                   post_body=post_body: self.expand_story(post_id,
+                                                                                                          post_body))
+                                                )
+            layout2.add_widget(header)
+            layout2.add_widget(label)
+            layout2.add_widget(comment_btn)
 
-        menu_posts = [
-            {
-                "viewclass": "TwoLineListItem",
-                "text": comment[3],
-                "secondary_text": comment[4],
-                "on_release": lambda x=comment[4]: dropdown.dismiss(),
-            }
-            for comment in comments
-        ]
-        dropdown = MDDropdownMenu(
-            caller=self.ids.ct_story_container,
-            items=menu_posts,
-            width_mult=4,
-        )
-        dropdown.open()
+            com_app.cursor.execute("SELECT * FROM comments WHERE post_ID = %s", (post_id,))
+            comments = com_app.cursor.fetchall()
 
-    def menu_callback(self, instance):
-        instance.dismiss()
+            layout3 = MDBoxLayout(orientation='vertical', size_hint_y=None)
+            layout3.bind(minimum_height=layout3.setter('height'))
+
+            for c in comments:
+                com_id = c[1]
+                com_user = c[3]
+                com_body = c[4]
+
+                header2 = OneLineRightIconListItem(ImageRightWidget(source="img.png"),
+                                                   text=com_user,
+                                                   bg_color=(248 / 255, 143 / 255, 70 / 255, 0.5))
+
+                label2 = Label(
+                    text=com_body,
+                    size_hint_y=None,
+                    color=(0, 0, 0, 1),
+                    size=(300, 300),
+                    text_size=(300, None),
+                    padding=(5, 5),
+                    halign="left",
+                    valign="top"
+                )
+
+                layout3.add_widget(header2)
+                layout3.add_widget(label2)
+
+            layout2.add_widget(layout3)
+
+        scroll.add_widget(layout2)
+
+        add_btn = MDRectangleFlatButton(md_bg_color=(248 / 255, 143 / 255, 70 / 255, 1),
+                                        text="Share your story",
+                                        text_color=(0, 0, 0, 1),
+                                        pos_hint={'center_x': 0.5, 'center_y': 0.1},
+                                        on_release=self.add_ct_story
+                                        )
+        # add everything to parent widget (Float Layout) in .kv file
+        self.ids.float.add_widget(top_bar)
+        self.ids.float.add_widget(message)
+        self.ids.float.add_widget(scroll)
+        self.ids.float.add_widget(add_btn)
+
+    def add_ct_story(self, touch):
+        print("add story")
+        self.manager.current = "AddCtPostScreen"
 
     def expand_story(self, post_id, post_body):
-        self.dialog = MDDialog(text=post_body,
-            buttons=[
-                MDRectangleFlatButton(
-                    text="Add Comment",
-                    pos_hint={"center_x":0.5, "center_y":0.5},
-                    on_release=lambda instance, post_id=post_id: self.add_ct_comment(post_id)
-                )
-            ]
-        )
+        self.dialog = MDDialog(text=f'Story: {post_body}',
+                               buttons=[
+                                   MDRectangleFlatButton(
+                                       text="Add Comment",
+                                       pos_hint={"center_x": 0.1, "center_y": 0.5},
+                                       on_release=lambda instance, post_id=post_id: self.add_ct_comment(post_id)
+                                   ),
+                                   MDRectangleFlatButton(
+                                       text="Cancel",
+                                       pos_hint={"center_x": 0.6, "center_y": 0.5},
+                                       on_release=lambda x: self.dialog.dismiss()
+                                   )
+                               ]
+                               )
         self.dialog.open()
 
     def add_ct_comment(self, post_id):
@@ -888,7 +1034,7 @@ class ViewCtPostScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "MenuScreen"
 
 
 class AddMtPostScreen(Screen):
@@ -926,7 +1072,7 @@ class AddMtPostScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "MenuScreen"
 
 
 class AddPtPostScreen(Screen):
@@ -964,7 +1110,7 @@ class AddPtPostScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "MenuScreen"
 
 
 class AddCtPostScreen(Screen):
@@ -1004,7 +1150,7 @@ class AddCtPostScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "MenuScreen"
 
 
 class UserPostScreen(Screen):
@@ -1132,10 +1278,362 @@ class UserPostScreen(Screen):
 
     def callback(self):
         self.manager.transition.direction = "right"
-        self.manager.current = "SuccessScreen"
+        self.manager.current = "MenuScreen"
+class AllTips(Screen):
+    def on_enter(self):
+        app = MDApp.get_running_app()
+        app.cursor.execute("SELECT * FROM tips")
+        tips = app.cursor.fetchall()
 
+        # Clear tips from previous load
+        self.ids.all_tips_container.clear_widgets()
+
+        for i in tips:
+            tip_title = i[0]
+            tip_category = i[2]
+            tip_body = i[1]
+
+            tips_display = TwoLineListItem(
+                text=tip_title,
+                secondary_text=tip_category,
+                # tertiary_text=tip_body,
+                on_release=lambda x, tip_title=tip_title: self.expand_tip(tip_title, tip_body),
+            )
+
+            self.ids.all_tips_container.add_widget(tips_display)
+
+    def expand_tip(self, title, tip):
+
+        app = MDApp.get_running_app()
+        app.cursor.execute("SELECT * FROM tips WHERE title = %s", (title,))
+        content = app.cursor.fetchall()
+
+        for i in content:
+            tip_content = i[1]
+
+        #create layout
+        layout = BoxLayout(orientation='vertical', padding=(10, 10, 10, 10))
+
+        #create label for scrollview
+        body_label=MDLabel(text=tip_content, size_hint_y=None, markup=True, valign="top", padding=(10,20))
+        body_label.theme_text_color = "Custom"
+        body_label.text_color = (250/255, 237/255, 202/255, 1 )
+        body_label.bind(texture_size=body_label.setter('size'))
+
+
+        #create scroll view
+        body = ScrollView(size_hint=(1, 1))
+        body.add_widget(body_label)
+
+        #add label to layout
+        layout.add_widget(body)
+
+        #create dismiss button
+        dismiss_button = Button(text="Dismiss",
+                                on_press=self.dismiss_popup,
+                                size_hint=(None, None),
+                                size=(100, 50),
+                                pos_hint={'center_x': 0.5, 'y': 0.10})
+
+        layout.add_widget(dismiss_button)
+
+        float_layout = FloatLayout(size=(Window.width - 10, Window.height - 10))
+        float_layout.add_widget(layout)
+
+
+        self.fulltip = Popup(title=title, content=float_layout, size=(Window.width-10, Window.height-10), auto_dismiss=True)
+        self.fulltip.open()
+
+
+
+    def dismiss_popup(self, instance):
+        if self.fulltip:
+            self.fulltip.dismiss()  # Dismiss the Popup
+
+    def allTips(self):
+        self.manager.current = 'AllTips'
+
+    def mountainTips(self):
+        self.manager.current = 'MountainTips'
+
+    def piedmontTips(self):
+        self.manager.current = 'PiedmontTips'
+
+    def coastTips(self):
+        self.manager.current = 'CoastTips'
+
+    def callback(self):
+        self.manager.transition.direction = "right"
+        self.manager.current = "MenuScreen"
+
+
+class MountainTips(Screen):
+    def on_enter(self):
+        app = MDApp.get_running_app()
+        app.cursor.execute("SELECT * FROM tips WHERE category = 'mountain'")
+        tips = app.cursor.fetchall()
+
+        # Clear tips from previous load
+        self.ids.mountain_tips_container.clear_widgets()
+
+        for i in tips:
+            tip_title = i[0]
+            tip_category = i[2]
+            tip_body = i[1]
+
+            tips_display = TwoLineListItem(
+                text=tip_title,
+                secondary_text=tip_category,
+                # tertiary_text=tip_body,
+                on_release=lambda x, tip_title=tip_title: self.expand_tip(tip_title, tip_body),
+            )
+
+            self.ids.mountain_tips_container.add_widget(tips_display)
+
+    def expand_tip(self, title, tip):
+
+        app = MDApp.get_running_app()
+        app.cursor.execute("SELECT * FROM tips WHERE title = %s", (title,))
+        content = app.cursor.fetchall()
+
+        for i in content:
+            tip_content = i[1]
+
+        # create layout
+        layout = BoxLayout(orientation='vertical', padding=(10, 10, 10, 10))
+
+        # create label for scrollview
+        body_label = MDLabel(text=tip_content, size_hint_y=None, markup=True, valign="top", padding=(10, 20))
+        body_label.theme_text_color = "Custom"
+        body_label.text_color = (250 / 255, 237 / 255, 202 / 255, 1)
+        body_label.bind(texture_size=body_label.setter('size'))
+
+        # create scroll view
+        body = ScrollView(size_hint=(1, 1))
+        body.add_widget(body_label)
+
+        # add label to layout
+        layout.add_widget(body)
+
+        # create dismiss button
+        dismiss_button = Button(text="Dismiss",
+                                on_press=self.dismiss_popup,
+                                size_hint=(None, None),
+                                size=(100, 50),
+                                pos_hint={'center_x': 0.5, 'y': 0.10})
+
+        layout.add_widget(dismiss_button)
+
+        float_layout = FloatLayout(size=(Window.width - 10, Window.height - 10))
+        float_layout.add_widget(layout)
+
+        self.fulltip = Popup(title=title, content=float_layout, size=(Window.width - 10, Window.height - 10),
+                             auto_dismiss=True)
+        self.fulltip.open()
+
+    def dismiss_popup(self, instance):
+        if self.fulltip:
+            self.fulltip.dismiss()  # Dismiss the Popup
+
+    def allTips(self):
+        self.manager.current = 'AllTips'
+
+    def mountainTips(self):
+        self.manager.current = 'MountainTips'
+
+    def piedmontTips(self):
+        self.manager.current = 'PiedmontTips'
+
+    def coastTips(self):
+        self.manager.current = 'CoastTips'
+
+    def callback(self):
+        self.manager.transition.direction = "right"
+        self.manager.current = "MenuScreen"
+
+
+class PiedmontTips(Screen):
+    def on_enter(self):
+        app = MDApp.get_running_app()
+        app.cursor.execute("SELECT * FROM tips WHERE category = 'piedmont'")
+        tips = app.cursor.fetchall()
+
+        # Clear tips from previous load
+        self.ids.piedmont_tips_container.clear_widgets()
+
+        for i in tips:
+            tip_title = i[0]
+            tip_category = i[2]
+            tip_body = i[1]
+
+            tips_display = TwoLineListItem(
+                text=tip_title,
+                secondary_text=tip_category,
+                # tertiary_text=tip_body,
+                on_release=lambda x, tip_title=tip_title: self.expand_tip(tip_title, tip_body),
+            )
+
+            self.ids.piedmont_tips_container.add_widget(tips_display)
+
+    def expand_tip(self, title, tip):
+
+        app = MDApp.get_running_app()
+        app.cursor.execute("SELECT * FROM tips WHERE title = %s", (title,))
+        content = app.cursor.fetchall()
+
+        for i in content:
+            tip_content = i[1]
+
+        # create layout
+        layout = BoxLayout(orientation='vertical', padding=(10, 10, 10, 10))
+
+        # create label for scrollview
+        body_label = MDLabel(text=tip_content, size_hint_y=None, markup=True, valign="top", padding=(10, 20))
+        body_label.theme_text_color = "Custom"
+        body_label.text_color = (250 / 255, 237 / 255, 202 / 255, 1)
+        body_label.bind(texture_size=body_label.setter('size'))
+
+        # create scroll view
+        body = ScrollView(size_hint=(1, 1))
+        body.add_widget(body_label)
+
+        # add label to layout
+        layout.add_widget(body)
+
+        # create dismiss button
+        dismiss_button = Button(text="Dismiss",
+                                on_press=self.dismiss_popup,
+                                size_hint=(None, None),
+                                size=(100, 50),
+                                pos_hint={'center_x': 0.5, 'y': 0.10})
+
+        layout.add_widget(dismiss_button)
+
+        float_layout = FloatLayout(size=(Window.width - 10, Window.height - 10))
+        float_layout.add_widget(layout)
+
+        self.fulltip = Popup(title=title, content=float_layout, size=(Window.width - 10, Window.height - 10),
+                             auto_dismiss=True)
+        self.fulltip.open()
+
+    def dismiss_popup(self, instance):
+        if self.fulltip:
+            self.fulltip.dismiss()  # Dismiss the Popup
+
+    def allTips(self):
+        self.manager.current = 'AllTips'
+
+    def mountainTips(self):
+        self.manager.current = 'MountainTips'
+
+    def piedmontTips(self):
+        self.manager.current = 'PiedmontTips'
+
+    def coastTips(self):
+        self.manager.current = 'CoastTips'
+
+    def callback(self):
+        self.manager.transition.direction = "right"
+        self.manager.current = "MenuScreen"
+
+
+class CoastTips(Screen):
+
+    def on_enter(self):
+        app = MDApp.get_running_app()
+        app.cursor.execute("SELECT * FROM tips WHERE category = 'coast'")
+        tips = app.cursor.fetchall()
+
+        # Clear tips from previous load
+        self.ids.coast_tips_container.clear_widgets()
+
+        for i in tips:
+            tip_title = i[0]
+            tip_category = i[2]
+            tip_body = i[1]
+
+            tips_display = TwoLineListItem(
+                text=tip_title,
+                secondary_text=tip_category,
+                # tertiary_text=tip_body,
+                on_release=lambda x, tip_title=tip_title: self.expand_tip(tip_title, tip_body),
+            )
+
+            self.ids.coast_tips_container.add_widget(tips_display)
+
+    def expand_tip(self, title, tip):
+
+        app = MDApp.get_running_app()
+        app.cursor.execute("SELECT * FROM tips WHERE title = %s", (title,))
+        content = app.cursor.fetchall()
+
+        for i in content:
+            tip_content = i[1]
+
+        # create layout
+        layout = BoxLayout(orientation='vertical', padding=(10, 10, 10, 10))
+
+        # create label for scrollview
+        body_label = MDLabel(text=tip_content, size_hint_y=None, markup=True, valign="top", padding=(10, 20))
+        body_label.theme_text_color = "Custom"
+        body_label.text_color = (250 / 255, 237 / 255, 202 / 255, 1)
+        body_label.bind(texture_size=body_label.setter('size'))
+
+        # create scroll view
+        body = ScrollView(size_hint=(1, 1))
+        body.add_widget(body_label)
+
+        # add label to layout
+        layout.add_widget(body)
+
+        # create dismiss button
+        dismiss_button = Button(text="Dismiss",
+                                on_press=self.dismiss_popup,
+                                size_hint=(None, None),
+                                size=(100, 50),
+                                pos_hint={'center_x': 0.5, 'y': 0.10})
+
+        layout.add_widget(dismiss_button)
+
+        float_layout = FloatLayout(size=(Window.width - 10, Window.height - 10))
+        float_layout.add_widget(layout)
+
+        self.fulltip = Popup(title=title, content=float_layout, size=(Window.width - 10, Window.height - 10),
+                             auto_dismiss=True)
+        self.fulltip.open()
+
+    def dismiss_popup(self, instance):
+        if self.fulltip:
+            self.fulltip.dismiss()  # Dismiss the Popup
+
+    def allTips(self):
+        self.manager.current = 'AllTips'
+
+    def mountainTips(self):
+        self.manager.current = 'MountainTips'
+
+    def piedmontTips(self):
+        self.manager.current = 'PiedmontTips'
+
+    def coastTips(self):
+        self.manager.current = 'CoastTips'
+
+    def callback(self):
+        self.manager.transition.direction = "right"
+        self.manager.current = "MenuScreen"
+class PlantSearch(Screen):
+    # self.camera = Camera(resolution=(640, 480), play=False, permission='camera')
+
+    def capture(self):
+        if self.camera.texture:
+            self.camera.export_to_png("search.png")
+
+    def callback(self):
+        self.manager.transition.direction = "right"
+        self.manager.current = "MenuScreen"
 class Bonfire(MDApp):
-    database = mysql.connector.Connect(host="localhost", user="root", password="admin321", database="bonfire")
+    #database = mysql.connector.Connect(host="localhost", user="root", password="admin321", database="bonfire")
+    database = mysql.connector.Connect(host="localhost", user="root", password="", database="bonfire")
     cursor = database.cursor()
     cursor.execute("select * from login")
     for i in cursor.fetchall():
@@ -1145,7 +1643,7 @@ class Bonfire(MDApp):
         # window icon
         self.icon = "img.png"
 
-        Builder.load_file("Bonfire2.kv")
+        Builder.load_file("Bonfire3.kv")
 
         screen_manager = ScreenManager()
         screen_manager.add_widget(LoginScreen(name='LoginScreen'))
@@ -1156,6 +1654,7 @@ class Bonfire(MDApp):
         screen_manager.add_widget(ChangePasswordScreen(name='ChangePasswordScreen'))
         screen_manager.add_widget(ViewUsersScreen(name='ViewUsersScreen'))
         screen_manager.add_widget(AdminDashScreen(name='AdminDashScreen'))
+        screen_manager.add_widget(MenuScreen(name='MenuScreen'))
         screen_manager.add_widget(ViewMtPostScreen(name='ViewMtPostScreen'))
         screen_manager.add_widget(AddMtPostScreen(name='AddMtPostScreen'))
         screen_manager.add_widget(ViewPtPostScreen(name='ViewPtPostScreen'))
@@ -1169,6 +1668,11 @@ class Bonfire(MDApp):
         screen_manager.add_widget(WelcomeMtScreen(name='WelcomeMtScreen'))
         screen_manager.add_widget(WelcomePtScreen(name='WelcomePtScreen'))
         screen_manager.add_widget(WelcomeCtScreen(name='WelcomeCtScreen'))
+        screen_manager.add_widget(AllTips(name='AllTips'))
+        screen_manager.add_widget(MountainTips(name='MountainTips'))
+        screen_manager.add_widget(PiedmontTips(name='PiedmontTips'))
+        screen_manager.add_widget(CoastTips(name='CoastTips'))
+        screen_manager.add_widget(PlantSearch(name='PlantSearch'))
 
         return screen_manager
 
