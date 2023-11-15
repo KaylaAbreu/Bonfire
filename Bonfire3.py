@@ -3,6 +3,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.app import MDApp
@@ -11,7 +12,8 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.window import Window
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.list import TwoLineListItem, ThreeLineAvatarIconListItem, IconRightWidget, IconLeftWidget, \
-    ThreeLineListItem, OneLineAvatarListItem, ImageLeftWidget, OneLineRightIconListItem, ImageRightWidget
+    ThreeLineListItem, OneLineAvatarListItem, ImageLeftWidget, OneLineRightIconListItem, ImageRightWidget, \
+    IRightBodyTouch, OneLineAvatarIconListItem
 from kivymd.uix.button import MDRectangleFlatButton, MDIconButton
 import requests
 import mysql.connector
@@ -463,7 +465,6 @@ class WelcomeCtScreen(Screen):
         self.manager.transition.direction = "right"
         self.manager.current = "MenuScreen"
 
-
 class ViewMtPostScreen(Screen):
     def on_enter(self):
         story_app = MDApp.get_running_app()
@@ -507,11 +508,13 @@ class ViewMtPostScreen(Screen):
             post_id = i[0]
             post_user = i[2]
             post_body = i[3]
+            like_counter = self.get_like_count(post_id)
+            dislike_counter = self.get_dislike_count(post_id)
 
             # Display user icon and username
             header = OneLineAvatarListItem(ImageLeftWidget(source="img.png"),
-                                           text=post_user,
-                                           bg_color=(248 / 255, 143 / 255, 70 / 255, 1),
+                                               text=post_user,
+                                               bg_color=(248 / 255, 143 / 255, 70 / 255, 1),
                                            )
             # post content
             label = Label(
@@ -535,9 +538,37 @@ class ViewMtPostScreen(Screen):
                                                                    post_body=post_body: self.expand_story(post_id,
                                                                                                           post_body))
                                                 )
-            layout2.add_widget(header)
-            layout2.add_widget(label)
-            layout2.add_widget(comment_btn)
+
+            self.like_label = Label(
+                text=f'{like_counter}',
+                color=(0, 0, 0, 1),
+                size=(20,20),
+                pos_hint={'center_x':0.79, 'center_y':1}
+            )
+
+            like = MDIconButton(icon="thumb-up",
+                                on_release=lambda instance, post=post_id, label=self.like_label: self.like(post, label))
+
+            self.dislike_label = Label(
+                text=f'{dislike_counter}',
+                color=(0, 0, 0, 1),
+                size=(20, 20),
+                pos_hint={'center_x': 0.93, 'center_y': 1}
+            )
+            dislike = MDIconButton(icon="thumb-down",
+                                   on_release=lambda instance, post=post_id, label=self.dislike_label: self.dislike(post, label))
+
+            layout = MDFloatLayout()
+            layout1 = MDBoxLayout(orientation="horizontal", size_hint_y=None, spacing=0.5,
+                                  md_bg_color=(248 / 255, 143 / 255, 70 / 255, 1),
+                                  height=header.height
+                                  )
+            layout1.add_widget(header)
+            layout1.add_widget(like)
+            layout1.add_widget(dislike)
+
+            layout.add_widget(self.like_label)
+            layout.add_widget(self.dislike_label)
 
             com_app.cursor.execute("SELECT * FROM comments WHERE post_ID = %s", (post_id,))
             comments = com_app.cursor.fetchall()
@@ -567,7 +598,11 @@ class ViewMtPostScreen(Screen):
 
                 layout3.add_widget(header2)
                 layout3.add_widget(label2)
+            layout2.add_widget(layout1)
+            layout2.add_widget(layout)
 
+            layout2.add_widget(label)
+            layout2.add_widget(comment_btn)
             layout2.add_widget(layout3)
 
         scroll.add_widget(layout2)
@@ -584,6 +619,45 @@ class ViewMtPostScreen(Screen):
         self.ids.float.add_widget(scroll)
         self.ids.float.add_widget(add_btn)
 
+    def get_like_count(self, post_id):
+        app = MDApp.get_running_app()
+        app.cursor.execute("SELECT likes from posts WHERE post_ID = %s",(post_id,))
+        like_sum = app.cursor.fetchone()
+        return like_sum[0] if like_sum else 0
+    def get_dislike_count(self, post_id):
+        app = MDApp.get_running_app()
+        app.cursor.execute("SELECT dislikes from posts WHERE post_ID = %s",(post_id,))
+        dislike_sum = app.cursor.fetchone()
+        return dislike_sum[0] if dislike_sum else 0
+    def like(self, post, label):
+        like_counter = int(label.text)
+        like_counter +=1
+
+        app = MDApp.get_running_app()
+        sql_command = "UPDATE posts SET likes = %s WHERE post_ID = %s"
+        values = (like_counter, post)
+        # Execute command
+        app.cursor.execute(sql_command, values)
+        # Commit changes to database
+        app.database.commit()
+        label.text = str(like_counter)
+        self.on_enter()
+        self.manager.current = "ViewMtPostScreen"
+
+    def dislike(self, post, label):
+        dislike_counter = int(label.text)
+        dislike_counter += 1
+
+        app = MDApp.get_running_app()
+        sql_command = "UPDATE posts SET dislikes = %s WHERE post_ID = %s"
+        values = (dislike_counter, post)
+        # Execute command
+        app.cursor.execute(sql_command, values)
+        # Commit changes to database
+        app.database.commit()
+        label.text = str(dislike_counter)
+        self.on_enter()
+        self.manager.current = "ViewMtPostScreen"
 
     def add_mt_story(self, touch):
         print("add story")
@@ -751,7 +825,7 @@ class ViewPtPostScreen(Screen):
         # Top Navigation Bar
         top_bar = (MDTopAppBar(title="Piedmont Bonfire",
                                anchor_title="left",
-                               left_action_items=[["menu", lambda x: self.callback()]],
+                               left_action_items=[["home", lambda x: self.callback()]],
                                elevation=1,
                                md_bg_color=[248 / 255, 143 / 255, 70 / 255, 1],
                                specific_text_color=[44 / 255, 44 / 255, 44 / 255, 1],
@@ -783,7 +857,8 @@ class ViewPtPostScreen(Screen):
             post_id = i[0]
             post_user = i[2]
             post_body = i[3]
-
+            like_counter = self.get_like_count(post_id)
+            dislike_counter = self.get_dislike_count(post_id)
             # Display user icon and username
             header = OneLineAvatarListItem(ImageLeftWidget(source="img.png"),
                                            text=post_user,
@@ -811,9 +886,36 @@ class ViewPtPostScreen(Screen):
                                                                    post_body=post_body: self.expand_story(post_id,
                                                                                                           post_body))
                                                 )
-            layout2.add_widget(header)
-            layout2.add_widget(label)
-            layout2.add_widget(comment_btn)
+            self.like_label = Label(
+                text=f'{like_counter}',
+                color=(0, 0, 0, 1),
+                size=(20, 20),
+                pos_hint={'center_x': 0.79, 'center_y': 1}
+            )
+
+            like = MDIconButton(icon="thumb-up",
+                                on_release=lambda instance, post=post_id, label=self.like_label: self.like(post, label))
+
+            self.dislike_label = Label(
+                text=f'{dislike_counter}',
+                color=(0, 0, 0, 1),
+                size=(20, 20),
+                pos_hint={'center_x': 0.93, 'center_y': 1}
+            )
+            dislike = MDIconButton(icon="thumb-down",
+                                   on_release=lambda instance, post=post_id, label=self.dislike_label: self.dislike(
+                                       post, label))
+            layout = MDFloatLayout()
+            layout1 = MDBoxLayout(orientation="horizontal", size_hint_y=None, spacing=0.5,
+                                  md_bg_color=(248 / 255, 143 / 255, 70 / 255, 1),
+                                  height=header.height
+                                  )
+            layout1.add_widget(header)
+            layout1.add_widget(like)
+            layout1.add_widget(dislike)
+
+            layout.add_widget(self.like_label)
+            layout.add_widget(self.dislike_label)
 
             com_app.cursor.execute("SELECT * FROM comments WHERE post_ID = %s", (post_id,))
             comments = com_app.cursor.fetchall()
@@ -843,7 +945,11 @@ class ViewPtPostScreen(Screen):
 
                 layout3.add_widget(header2)
                 layout3.add_widget(label2)
+            layout2.add_widget(layout1)
+            layout2.add_widget(layout)
 
+            layout2.add_widget(label)
+            layout2.add_widget(comment_btn)
             layout2.add_widget(layout3)
 
         scroll.add_widget(layout2)
@@ -852,7 +958,7 @@ class ViewPtPostScreen(Screen):
                                         text="Share your story",
                                         text_color=(0, 0, 0, 1),
                                         pos_hint={'center_x': 0.5, 'center_y': 0.1},
-                                        on_release=self.add_mt_story
+                                        on_release=self.add_pt_story
                                         )
         # add everything to parent widget (Float Layout) in .kv file
         self.ids.float.add_widget(top_bar)
@@ -860,7 +966,48 @@ class ViewPtPostScreen(Screen):
         self.ids.float.add_widget(scroll)
         self.ids.float.add_widget(add_btn)
 
-    def add_mt_story(self, touch):
+    def get_like_count(self, post_id):
+        app = MDApp.get_running_app()
+        app.cursor.execute("SELECT likes from posts WHERE post_ID = %s", (post_id,))
+        like_sum = app.cursor.fetchone()
+        return like_sum[0] if like_sum else 0
+
+    def get_dislike_count(self, post_id):
+        app = MDApp.get_running_app()
+        app.cursor.execute("SELECT dislikes from posts WHERE post_ID = %s", (post_id,))
+        dislike_sum = app.cursor.fetchone()
+        return dislike_sum[0] if dislike_sum else 0
+
+    def like(self, post, label):
+        like_counter = int(label.text)
+        like_counter += 1
+
+        app = MDApp.get_running_app()
+        sql_command = "UPDATE posts SET likes = %s WHERE post_ID = %s"
+        values = (like_counter, post)
+        # Execute command
+        app.cursor.execute(sql_command, values)
+        # Commit changes to database
+        app.database.commit()
+        label.text = str(like_counter)
+        self.on_enter()
+        self.manager.current = "ViewPtPostScreen"
+
+    def dislike(self, post, label):
+        dislike_counter = int(label.text)
+        dislike_counter += 1
+
+        app = MDApp.get_running_app()
+        sql_command = "UPDATE posts SET dislikes = %s WHERE post_ID = %s"
+        values = (dislike_counter, post)
+        # Execute command
+        app.cursor.execute(sql_command, values)
+        # Commit changes to database
+        app.database.commit()
+        label.text = str(dislike_counter)
+        self.on_enter()
+        self.manager.current = "ViewPtPostScreen"
+    def add_pt_story(self, touch):
         print("add story")
         self.manager.current = "AddPtPostScreen"
 
@@ -870,7 +1017,7 @@ class ViewPtPostScreen(Screen):
                                    MDRectangleFlatButton(
                                        text="Add Comment",
                                        pos_hint={"center_x": 0.1, "center_y": 0.5},
-                                       on_release=lambda instance, post_id=post_id: self.add_mt_comment(post_id)
+                                       on_release=lambda instance, post_id=post_id: self.add_pt_comment(post_id)
                                    ),
                                    MDRectangleFlatButton(
                                        text="Cancel",
@@ -881,7 +1028,7 @@ class ViewPtPostScreen(Screen):
                                )
         self.dialog.open()
 
-    def add_mt_comment(self, post_id):
+    def add_pt_comment(self, post_id):
         self.dialog.dismiss()
         self.manager.get_screen('PtCommentScreen').post_id = post_id
         self.manager.current = "PtCommentScreen"
@@ -935,6 +1082,8 @@ class ViewCtPostScreen(Screen):
             post_user = i[2]
             post_body = i[3]
 
+            like_counter = self.get_like_count(post_id)
+            dislike_counter = self.get_dislike_count(post_id)
             # Display user icon and username
             header = OneLineAvatarListItem(ImageLeftWidget(source="img.png"),
                                            text=post_user,
@@ -962,9 +1111,37 @@ class ViewCtPostScreen(Screen):
                                                                    post_body=post_body: self.expand_story(post_id,
                                                                                                           post_body))
                                                 )
-            layout2.add_widget(header)
-            layout2.add_widget(label)
-            layout2.add_widget(comment_btn)
+            self.like_label = Label(
+                text=f'{like_counter}',
+                color=(0, 0, 0, 1),
+                size=(20, 20),
+                pos_hint={'center_x': 0.79, 'center_y': 1}
+            )
+
+            like = MDIconButton(icon="thumb-up",
+                                on_release=lambda instance, post=post_id, label=self.like_label: self.like(post, label))
+
+            self.dislike_label = Label(
+                text=f'{dislike_counter}',
+                color=(0, 0, 0, 1),
+                size=(20, 20),
+                pos_hint={'center_x': 0.93, 'center_y': 1}
+            )
+            dislike = MDIconButton(icon="thumb-down",
+                                   on_release=lambda instance, post=post_id, label=self.dislike_label: self.dislike(
+                                       post, label))
+
+            layout = MDFloatLayout()
+            layout1 = MDBoxLayout(orientation="horizontal", size_hint_y=None, spacing=0.5,
+                                  md_bg_color=(248 / 255, 143 / 255, 70 / 255, 1),
+                                  height=header.height
+                                  )
+            layout1.add_widget(header)
+            layout1.add_widget(like)
+            layout1.add_widget(dislike)
+
+            layout.add_widget(self.like_label)
+            layout.add_widget(self.dislike_label)
 
             com_app.cursor.execute("SELECT * FROM comments WHERE post_ID = %s", (post_id,))
             comments = com_app.cursor.fetchall()
@@ -995,6 +1172,11 @@ class ViewCtPostScreen(Screen):
                 layout3.add_widget(header2)
                 layout3.add_widget(label2)
 
+            layout2.add_widget(layout1)
+            layout2.add_widget(layout)
+
+            layout2.add_widget(label)
+            layout2.add_widget(comment_btn)
             layout2.add_widget(layout3)
 
         scroll.add_widget(layout2)
@@ -1010,6 +1192,48 @@ class ViewCtPostScreen(Screen):
         self.ids.float.add_widget(message)
         self.ids.float.add_widget(scroll)
         self.ids.float.add_widget(add_btn)
+
+    def get_like_count(self, post_id):
+        app = MDApp.get_running_app()
+        app.cursor.execute("SELECT likes from posts WHERE post_ID = %s", (post_id,))
+        like_sum = app.cursor.fetchone()
+        return like_sum[0] if like_sum else 0
+
+    def get_dislike_count(self, post_id):
+        app = MDApp.get_running_app()
+        app.cursor.execute("SELECT dislikes from posts WHERE post_ID = %s", (post_id,))
+        dislike_sum = app.cursor.fetchone()
+        return dislike_sum[0] if dislike_sum else 0
+
+    def like(self, post, label):
+        like_counter = int(label.text)
+        like_counter += 1
+
+        app = MDApp.get_running_app()
+        sql_command = "UPDATE posts SET likes = %s WHERE post_ID = %s"
+        values = (like_counter, post)
+        # Execute command
+        app.cursor.execute(sql_command, values)
+        # Commit changes to database
+        app.database.commit()
+        label.text = str(like_counter)
+        self.on_enter()
+        self.manager.current = "ViewCtPostScreen"
+
+    def dislike(self, post, label):
+        dislike_counter = int(label.text)
+        dislike_counter += 1
+
+        app = MDApp.get_running_app()
+        sql_command = "UPDATE posts SET dislikes = %s WHERE post_ID = %s"
+        values = (dislike_counter, post)
+        # Execute command
+        app.cursor.execute(sql_command, values)
+        # Commit changes to database
+        app.database.commit()
+        label.text = str(dislike_counter)
+        self.on_enter()
+        self.manager.current = "ViewCtPostScreen"
 
     def add_ct_story(self, touch):
         print("add story")
