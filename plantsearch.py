@@ -1040,7 +1040,7 @@ class PlantSearch(Screen):
 class Bonfire(MDApp):
     database = mysql.connector.Connect(host="localhost",
                                        user="root",
-                                       password="SoSweet.47",
+                                       password="",
                                        database="bonfire_tips_db")
     cursor = database.cursor()
 
