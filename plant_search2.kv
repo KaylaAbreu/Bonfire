@@ -1,0 +1,39 @@
+<HomeScreen>:
+    MDBoxLayout:
+        id: boxlayout
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Identify a Plant"
+            anchor_title: "left"
+            left_action_items: [["menu", lambda x: root.callback()]] #implement
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1
+
+            Camera:
+                id: camera
+                resolution: (640, 480)
+                play: True
+                #pos: (0, 80)
+                pos_hint:{"center_x": 0.5, "center_y":0.75}
+                size: (200, 200)
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .5, "center_y": .15}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Search"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press: root.capture()

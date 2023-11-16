@@ -1041,7 +1041,8 @@ class Bonfire(MDApp):
     database = mysql.connector.Connect(host="localhost",
                                        user="root",
                                        password="",
-                                       database="bonfire_tips_db")
+                                       database="bonfire")
+                                       # database="bonfire_tips_db")
     cursor = database.cursor()
 
     def build(self):
