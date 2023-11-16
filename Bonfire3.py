@@ -88,7 +88,7 @@ class AdminScreen(Screen):
         self.manager.get_screen('ViewUsersScreen').display_users(users)
         return users
 
-    def edit_posts(self):
+    def view_posts_tips(self):
         self.manager.current = 'AdminDashScreen'
 
     def get_posts_from_database(self):
@@ -99,7 +99,13 @@ class AdminScreen(Screen):
         return posts
 
     def on_logout(self):
+
+        login_screen = self.manager.get_screen('LoginScreen')
+        login_screen.ids.username.text = ""
+        login_screen.ids.password.text = ""
+        login_screen.ids.error_label.text = ""
         self.manager.current = 'LoginScreen'
+
 
 
 class ConfirmDeleteUserDialog(BoxLayout):
@@ -164,9 +170,8 @@ class ViewUsersScreen(Screen):
         self.dialog.open()
 
     def on_back(self):
-        self.manager.current = 'AdminScreen'
-
-
+        self.manager.transition.direction = "left"
+        self.manager.current = "AdminScreen"
 
 class SignupScreen(Screen):
     def on_login(self):
@@ -175,23 +180,25 @@ class SignupScreen(Screen):
     def send_data(self, username, password, email):
         app = MDApp.get_running_app()
 
-        # Check if the username already exists in the database
-        username_exists = self.check_username_exists(username.text)
-
-        if username_exists:
-
-            self.ids.error_label.text = "Username already taken."
+        # Check if any of the input fields are empty
+        if not username.text or not password.text or not email.text:
+            self.ids.error_label.text = "Please fill in all the fields."
         else:
+            # Check if the username already exists in the database
+            username_exists = self.check_username_exists(username.text)
 
-            self.ids.error_label.text = ""
+            if username_exists:
+                self.ids.error_label.text = "Username already taken."
+            else:
+                self.ids.error_label.text = ""
 
-            # Insert the new user into the database
-            app.cursor.execute(
-                f"INSERT INTO login (username, password, email) VALUES ('{username.text}', '{password.text}', '{email.text}')")
-            app.database.commit()
-            print(f"User {username.text} registered")
+                # Insert the new user into the database
+                app.cursor.execute(
+                    f"INSERT INTO login (username, password, email) VALUES ('{username.text}', '{password.text}', '{email.text}')")
+                app.database.commit()
+                print(f"User {username.text} registered")
 
-            self.manager.current = 'LoginScreen'
+                self.manager.current = 'LoginScreen'
 
     def check_username_exists(self, username):
         app = MDApp.get_running_app()
@@ -202,7 +209,6 @@ class SignupScreen(Screen):
         result = app.cursor.fetchone()
 
         return result is not None
-
 
 class ForgotPasswordScreen(Screen):
     def on_login(self):
@@ -295,7 +301,9 @@ class SuccessScreen(Screen):
         self.manager.current = "MenuScreen"
 
 class AdminDashScreen(Screen):
-    pass
+    def callback (self):
+        self.manager.transition.direction = "right"
+        self.manager.current = "AdminScreen"
 
 class ChangePasswordScreen(Screen):
     def change_password(self, username, reset_code, new_password):
@@ -331,10 +339,15 @@ class ChangePasswordScreen(Screen):
 
 class MenuScreen(Screen):
     def on_logout(self):
-        clear_login = self.manager.get_screen('LoginScreen')
-        clear_login.ids.username.text = ""
-        clear_login.ids.password.text = ""
+        login_screen = self.manager.get_screen('LoginScreen')
+        if login_screen:
+            login_screen.ids.username.text = ""
+            login_screen.ids.password.text = ""
+            login_screen.ids.error_label.text = ""
+
         self.manager.current = 'LoginScreen'
+
+
 class Alerts():
     def __init__(self):
         # Initialize headlines for dialog box in Welcome Screens
@@ -1978,8 +1991,8 @@ class PlantSearch(Screen):
         self.manager.transition.direction = "right"
         self.manager.current = "MenuScreen"
 class Bonfire(MDApp):
-    #database = mysql.connector.Connect(host="localhost", user="root", password="admin321", database="bonfire")
-    database = mysql.connector.Connect(host="localhost", user="root", password="", database="bonfire")
+    database = mysql.connector.Connect(host="localhost", user="root", password="admin321", database="bonfire")
+    #database = mysql.connector.Connect(host="localhost", user="root", password="", database="bonfire")
     cursor = database.cursor()
     cursor.execute("select * from login")
     for i in cursor.fetchall():
