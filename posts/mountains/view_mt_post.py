@@ -180,7 +180,7 @@ class ViewMtPostScreen(MDScreen):
 
     def like(self, post, label):
         like_counter = int(label.text)
-        like_counter +=1
+        like_counter += 1
 
         app = MDApp.get_running_app()
         sql_command = "UPDATE posts SET likes = %s WHERE post_ID = %s"
@@ -241,3 +241,9 @@ class ViewMtPostScreen(MDScreen):
         self.manager.transition.direction = "right"
         self.manager.current = "MenuScreen"
 
+    def on_logout(self):
+        login_screen = self.manager.get_screen('LoginScreen')
+        login_screen.ids.username.text = ""
+        login_screen.ids.password.text = ""
+        login_screen.ids.error_label.text = ""
+        self.manager.current = 'LoginScreen'

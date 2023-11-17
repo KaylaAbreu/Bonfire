@@ -24,7 +24,9 @@
                 pos_hint: {"center_x": .5, "center_y": .7}
                 text: "View Users"
                 text_color: 44/255, 44/255, 4/255, 1 #gray
-                on_release:root.view_users()
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.view_users()
 
             MDRaisedButton:
                 md_bg_color: 248/255, 143/255, 79/255, 1 #light orange

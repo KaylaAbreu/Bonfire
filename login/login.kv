@@ -26,6 +26,7 @@
                 id:username
                 hint_text: "Username"
                 size_hint: 1, None
+                multiline: False
                 pos_hint: {"center_x": .5, "center_y": .5}
                 height: self.minimum_height
                 background_color: 1, 1, 1, 0
@@ -53,6 +54,7 @@
             TextInput:
                 id:password
                 hint_text: "Password"
+                multiline: False
                 size_hint: 1, None
                 pos_hint: {"center_x": .5, "center_y": .5}
                 height: self.minimum_height
@@ -82,13 +84,17 @@
                 text: "Sign Up"
                 pos_hint:{"center_x":0.5, "center_y": -4.0}
                 font_size: "13sp"
-                on_release: root.on_signup()
+                on_release:
+                    root.manager.transition.direction = 'left'
+                    root.on_signup()
 
             MDTextButton:
                 text: "Forgot Password"
                 pos_hint:{"center_x":0.5, "center_y": -4.6}
                 font_size: "13sp"
-                on_release: root.on_forgotPassword()
+                on_release:
+                    root.manager.transition.direction = 'left'
+                    root.on_forgotPassword()
 
         MDLabel:
             id: error_label

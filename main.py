@@ -5,8 +5,11 @@ from kivy.lang import Builder
 from posts.mountains.welcome_mt import WelcomeMtScreen
 from posts.mountains.view_mt_post import ViewMtPostScreen
 from posts.mountains.add_mt_post import AddMtPostScreen
+from posts.mountains.add_mt_comment import MtCommentScreen
 from posts.piedmont.add_pt_post import AddPtPostScreen
+from posts.piedmont.add_pt_comment import PtCommentScreen
 from posts.coast.add_ct_post import AddCtPostScreen
+from posts.coast.add_ct_comment import CtCommentScreen
 from posts.piedmont.view_pt_post import ViewPtPostScreen
 from posts.coast.view_ct_post import ViewCtPostScreen
 from posts.piedmont.welcome_pt import WelcomePtScreen
@@ -27,6 +30,7 @@ from tips.ct_tips import CoastTips
 from admin.admin_dash import AdminDashScreen
 from plant import PlantSearch
 import mysql.connector
+import database
 
 
 Window.size = (350, 580)
@@ -37,7 +41,7 @@ class MyScreenManager(ScreenManager):
 
 
 class Bonfire(MDApp):
-    database = mysql.connector.Connect(host="localhost", user="root", password="", database="bonfire")
+    database = mysql.connector.Connect(host=database.host, user=database.user, password=database.password, database=database.database)
     cursor = database.cursor()
 
     def build(self):
@@ -48,6 +52,9 @@ class Bonfire(MDApp):
         Builder.load_file("posts/mountains/welcome_mt.kv")
         Builder.load_file("posts/mountains/view_mt_post.kv")
         Builder.load_file("posts/mountains/add_mt_post.kv")
+        Builder.load_file("posts/mountains/add_mt_comment.kv")
+        Builder.load_file("posts/piedmont/add_pt_comment.kv")
+        Builder.load_file("posts/coast/add_ct_comment.kv")
         Builder.load_file("posts/piedmont/add_pt_post.kv")
         Builder.load_file("posts/coast/add_ct_post.kv")
         Builder.load_file("posts/piedmont/view_pt_post.kv")
@@ -65,6 +72,7 @@ class Bonfire(MDApp):
         Builder.load_file("tips/all_tips.kv")
         Builder.load_file("tips/mt_tips.kv")
         Builder.load_file("tips/pt_tips.kv")
+        Builder.load_file("tips/ct_tips.kv")
 
         return MyScreenManager()
 

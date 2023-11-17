@@ -26,6 +26,7 @@
                 id:username
                 hint_text: "New Username"
                 size_hint: 1, None
+                multiline: False
                 pos_hint: {"center_x": .5, "center_y": .5}
                 height: self.minimum_height
                 background_color: 1, 1, 1, 0
@@ -53,6 +54,7 @@
             TextInput:
                 id:password
                 hint_text: "New Password"
+                multiline: False
                 size_hint: 1, None
                 pos_hint: {"center_x": .5, "center_y": .5}
                 height: self.minimum_height
@@ -82,6 +84,7 @@
             TextInput:
                 id:email
                 hint_text: "Email"
+                multiline: False
                 size_hint: 1, None
                 pos_hint: {"center_x": .5, "center_y": .5}
                 height: self.minimum_height
@@ -110,7 +113,9 @@
                 text: "Back To Login"
                 pos_hint:{"center_x":0.5, "center_y": -3.5}
                 font_size: "13sp"
-                on_release: root.on_login()
+                on_release:
+                    root.manager.transition.direction = 'right'
+                    root.on_login()
 
             MDLabel:
                 id: error_label

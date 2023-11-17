@@ -26,6 +26,7 @@ class UserPostScreen(MDScreen):
             top_bar = (MDTopAppBar(title="User Stories",
                                    anchor_title="left",
                                    left_action_items=[["home", lambda x: self.callback()]],
+                                   right_action_items=[["logout", lambda x: self.on_logout()]],
                                    elevation=1,
                                    md_bg_color=[248 / 255, 143 / 255, 70 / 255, 1],
                                    specific_text_color=[44 / 255, 44 / 255, 44 / 255, 1],
@@ -251,5 +252,16 @@ class UserPostScreen(MDScreen):
         self.dialog.open()
 
     def callback(self):
-        self.manager.transition.direction = "right"
-        self.manager.current = "MenuScreen"
+        username = self.manager.get_screen('LoginScreen').current_user
+        if username == 'admin':
+            self.manager.transition.direction = "right"
+            self.manager.current = "AdminScreen"
+        else:
+            self.manager.transition.direction = "right"
+            self.manager.current = "MenuScreen"
+    def on_logout(self):
+        login_screen = self.manager.get_screen('LoginScreen')
+        login_screen.ids.username.text = ""
+        login_screen.ids.password.text = ""
+        login_screen.ids.error_label.text = ""
+        self.manager.current = 'LoginScreen'

@@ -1,0 +1,41 @@
+<MtCommentScreen>:
+    MDBoxLayout:
+        #md_bg_color: 0.996, 0.365, 0.149, 1  # Orange color in RGBA format
+        md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Mountain Comments"
+            anchor_title: "left"
+            left_action_items: [["home", lambda x: root.callback()]]
+            right_action_items: [["logout", lambda x: root.on_logout()]]
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 79/255, 1  # light Orange color in RGBA format
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            Label:
+                id: post_label
+                text_size: self.size
+                align: "center"
+                valign: "middle"
+                font_size: 22
+                pos_hint: {"center_x": .6, "center_y": .8}
+            TextInput:
+                id: post_input
+                hint_text: "Add your comment here"
+                multiline: True
+                size_hint_y: None
+                height: 400
+                pos_hint: {"center_x": .5, "center_y": .45}
+                font_size: "19sp"
+                #hint_text_color: 170/255, 170/255, 170/255, 1
+                cursor_color: 0,0,0,1
+                #hint_text_color: 0.5, 0.5, 0.5, 1  # Set the hint text color to a dark gray
+            MDRaisedButton:
+                pos_hint: {"center_x": .5, "center_y": .1}
+                size: (1, .5)
+                font_size: 32
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                text_color: 44/255, 44/255, 44/255, 1 #gray
+                text: "Add Comment"
+                on_press:
+                    root.mt_comment_submit()

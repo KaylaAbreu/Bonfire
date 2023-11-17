@@ -3,23 +3,26 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.screen import MDScreen
 
 
-class AddPtPostScreen(MDScreen):
-    def pt_submit(self):
+class PtCommentScreen(MDScreen):
+    post_id = None
+
+    def pt_comment_submit(self):
         app = MDApp.get_running_app()
 
         username = self.manager.get_screen('LoginScreen').current_user
         user_ID = self.manager.get_screen('LoginScreen').user_ID
+        # post_ID = self.manager.get_screen('ViewMtPostScreen').post_id
 
         # Check length of post
         if len(self.ids.post_input.text) == 0:
-            dialog = MDDialog(text="Please add a story")
+            dialog = MDDialog(text="Please add a comment")
             dialog.open()
-            self.manager.current = 'AddPtPostScreen'
+            self.manager.current = 'PtCommentScreen'
 
         elif len(self.ids.post_input.text) < 255:
             # Add record to database
-            sql_command = "INSERT INTO posts (user_ID, username, content, location) VALUES (%s, %s, %s, 'piedmont')"
-            values = (user_ID, username, self.ids.post_input.text,)
+            sql_command = "INSERT INTO comments (post_ID, user_ID, username, content, location) VALUES (%s, %s, %s, %s, 'piedmont')"
+            values = (self.post_id, user_ID, username, self.ids.post_input.text,)
 
             # Execute command
             app.cursor.execute(sql_command, values)
@@ -32,13 +35,13 @@ class AddPtPostScreen(MDScreen):
 
             self.manager.current = 'ViewPtPostScreen'
         else:
-            dialog = MDDialog(text="Posts must be under 255 characters")
+            dialog = MDDialog(text="Comments must be under 255 characters")
             dialog.open()
-            self.manager.current = 'AddPtPostScreen'
+            self.manager.current = 'PtCommentScreen'
 
     def callback(self):
-        post = self.manager.get_screen('AddPtPostScreen')
-        post.ids.post_input.text = ""
+        comment = self.manager.get_screen('PtCommentScreen')
+        comment.ids.post_input.text = ""
         self.manager.transition.direction = "right"
         self.manager.current = "MenuScreen"
 
@@ -48,4 +51,3 @@ class AddPtPostScreen(MDScreen):
         login_screen.ids.password.text = ""
         login_screen.ids.error_label.text = ""
         self.manager.current = 'LoginScreen'
-

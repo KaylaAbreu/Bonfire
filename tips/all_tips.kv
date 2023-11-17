@@ -7,7 +7,8 @@
         MDTopAppBar:
             title: "All Tips"
             anchor_title: "left"
-            left_action_items: [["home", lambda x: root.callback()]] #implement
+            left_action_items: [["home", lambda x: root.callback()]]
+            right_action_items: [["logout", lambda x: root.on_logout()]]
             elevation: 1
             md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
             specific_text_color: 44/255, 44/255, 44/255, 1 #gray

@@ -205,6 +205,7 @@ class ViewPtPostScreen(MDScreen):
         label.text = str(dislike_counter)
         self.on_enter()
         self.manager.current = "ViewPtPostScreen"
+
     def add_pt_story(self, touch):
         print("add story")
         self.manager.current = "AddPtPostScreen"
@@ -234,4 +235,12 @@ class ViewPtPostScreen(MDScreen):
     def callback(self):
         self.manager.transition.direction = "right"
         self.manager.current = "MenuScreen"
+
+    def on_logout(self):
+        login_screen = self.manager.get_screen('LoginScreen')
+        login_screen.ids.username.text = ""
+        login_screen.ids.password.text = ""
+        login_screen.ids.error_label.text = ""
+        self.manager.current = 'LoginScreen'
+
 
