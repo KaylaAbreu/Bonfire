@@ -25,7 +25,7 @@ from tips.mt_tips import MountainTips
 from tips.pt_tips import PiedmontTips
 from tips.ct_tips import CoastTips
 from admin.admin_dash import AdminDashScreen
-from plants.plant_search import PlantSearch
+from plant import PlantSearch
 import mysql.connector
 
 
@@ -44,6 +44,7 @@ class Bonfire(MDApp):
         Builder.load_file("main.kv")
         Builder.load_file("success.kv")
         Builder.load_file("menu_screen.kv")
+        Builder.load_file("plant.kv")
         Builder.load_file("posts/mountains/welcome_mt.kv")
         Builder.load_file("posts/mountains/view_mt_post.kv")
         Builder.load_file("posts/mountains/add_mt_post.kv")
@@ -64,7 +65,6 @@ class Bonfire(MDApp):
         Builder.load_file("tips/all_tips.kv")
         Builder.load_file("tips/mt_tips.kv")
         Builder.load_file("tips/pt_tips.kv")
-        Builder.load_file("plants/plant_search.kv")
 
         return MyScreenManager()
 
