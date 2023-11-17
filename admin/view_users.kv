@@ -20,8 +20,12 @@
                     rgb: 248/255, 143/255, 70/255, 1
 
 
-            GridLayout:
-                id: user_list
-                cols: 2
-                spacing: dp(15)
-                background_color: 250/255, 237/255, 202/255, 1
+            ScrollView:  # Add ScrollView here
+                GridLayout:
+                    id: user_list
+                    cols: 2
+                    spacing: dp(15)
+                    size_hint_y: None  # Make sure the height is not dependent on content
+                    height: self.minimum_height  # Set the height to the minimum required
+
+                    background_color: 250/255, 237/255, 202/255, 1

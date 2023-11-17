@@ -9,11 +9,11 @@ class CtCommentScreen(MDScreen):
     def ct_comment_submit(self):
         app = MDApp.get_running_app()
 
+        # Gets username and user_ID from LoginScreen
         username = self.manager.get_screen('LoginScreen').current_user
-        user_ID = self.manager.get_screen('LoginScreen').user_ID
-        # post_ID = self.manager.get_screen('ViewMtPostScreen').post_id
+        user_id = self.manager.get_screen('LoginScreen').user_ID
 
-        # Check length of post
+        # Checks length of comment
         if len(self.ids.post_input.text) == 0:
             dialog = MDDialog(text="Please add a comment")
             dialog.open()
@@ -21,8 +21,9 @@ class CtCommentScreen(MDScreen):
 
         elif len(self.ids.post_input.text) < 255:
             # Add record to database
-            sql_command = "INSERT INTO comments (post_ID, user_ID, username, content, location) VALUES (%s, %s, %s, %s, 'coast')"
-            values = (self.post_id, user_ID, username, self.ids.post_input.text,)
+            sql_command = ("INSERT INTO comments (post_ID, user_ID, username, content, location) "
+                           "VALUES (%s, %s, %s, %s, 'coast')")
+            values = (self.post_id, user_id, username, self.ids.post_input.text,)
 
             # Execute command
             app.cursor.execute(sql_command, values)
@@ -35,15 +36,18 @@ class CtCommentScreen(MDScreen):
 
             self.manager.current = 'ViewCtPostScreen'
         else:
+            # Displays error message
             dialog = MDDialog(text="Comments must be under 255 characters")
             dialog.open()
             self.manager.current = 'CtCommentScreen'
 
     def callback(self):
+        # Clears comment box if there's leftover text
         comment = self.manager.get_screen('CtCommentScreen')
         comment.ids.post_input.text = ""
         self.manager.transition.direction = "right"
         self.manager.current = "MenuScreen"
+
     def on_logout(self):
         # Switches to LoginScreen and erases any leftover content for username, password, and error text
         login_screen = self.manager.get_screen('LoginScreen')

@@ -16,6 +16,7 @@ class ViewPtPostScreen(MDScreen):
         story_app = MDApp.get_running_app()
         com_app = MDApp.get_running_app()
 
+        # Fetch piedmont posts
         story_app.cursor.execute("SELECT * FROM posts WHERE location = 'piedmont'")
         stories = story_app.cursor.fetchall()
 
@@ -42,6 +43,7 @@ class ViewPtPostScreen(MDScreen):
                         halign="center",
                         font_size='19sp'
                         )
+        # Scroll View
         scroll = MDScrollView(size_hint=(1, 0.547),
                               pos_hint={"top": 0.7})  # size_hint adjusts the container size of the scroll
 
@@ -51,12 +53,15 @@ class ViewPtPostScreen(MDScreen):
         # Prevent repeats
         self.ids.float.clear_widgets()
 
+        # Displays user stories with like, dislike, and comment buttons
         for i in stories:
             post_id = i[0]
             post_user = i[2]
             post_body = i[3]
+
             like_counter = self.get_like_count(post_id)
             dislike_counter = self.get_dislike_count(post_id)
+
             # Display user icon and username
             header = OneLineAvatarListItem(ImageLeftWidget(source="posts/img.png"),
                                            text=post_user,
@@ -84,6 +89,7 @@ class ViewPtPostScreen(MDScreen):
                                                                    post_body=post_body: self.expand_story(post_id,
                                                                                                           post_body))
                                                 )
+            # Display number of likes
             self.like_label = Label(
                 text=f'{like_counter}',
                 color=(0, 0, 0, 1),
@@ -94,6 +100,7 @@ class ViewPtPostScreen(MDScreen):
             like = MDIconButton(icon="thumb-up",
                                 on_release=lambda instance, post=post_id, label=self.like_label: self.like(post, label))
 
+            # Display number of dislikes
             self.dislike_label = Label(
                 text=f'{dislike_counter}',
                 color=(0, 0, 0, 1),
@@ -121,6 +128,7 @@ class ViewPtPostScreen(MDScreen):
             layout3 = MDBoxLayout(orientation='vertical', size_hint_y=None)
             layout3.bind(minimum_height=layout3.setter('height'))
 
+            # Lists comments to a post underneath the post
             for c in comments:
                 com_id = c[1]
                 com_user = c[3]
@@ -165,18 +173,21 @@ class ViewPtPostScreen(MDScreen):
         self.ids.float.add_widget(add_btn)
 
     def get_like_count(self, post_id):
+        # Gets current number of likes for a post
         app = MDApp.get_running_app()
         app.cursor.execute("SELECT likes from posts WHERE post_ID = %s", (post_id,))
         like_sum = app.cursor.fetchone()
         return like_sum[0] if like_sum else 0
 
     def get_dislike_count(self, post_id):
+        # Gets current number of dislikes for a post
         app = MDApp.get_running_app()
         app.cursor.execute("SELECT dislikes from posts WHERE post_ID = %s", (post_id,))
         dislike_sum = app.cursor.fetchone()
         return dislike_sum[0] if dislike_sum else 0
 
     def like(self, post, label):
+        # Increase number of likes by 1
         like_counter = int(label.text)
         like_counter += 1
 
@@ -192,25 +203,31 @@ class ViewPtPostScreen(MDScreen):
         self.manager.current = "ViewPtPostScreen"
 
     def dislike(self, post, label):
+        # Increases number of dislikes by 1
         dislike_counter = int(label.text)
         dislike_counter += 1
 
         app = MDApp.get_running_app()
         sql_command = "UPDATE posts SET dislikes = %s WHERE post_ID = %s"
         values = (dislike_counter, post)
+
         # Execute command
         app.cursor.execute(sql_command, values)
+
         # Commit changes to database
         app.database.commit()
+
         label.text = str(dislike_counter)
+
         self.on_enter()
         self.manager.current = "ViewPtPostScreen"
 
     def add_pt_story(self, touch):
-        print("add story")
+        # Switches to AddPtPostScreen
         self.manager.current = "AddPtPostScreen"
 
     def expand_story(self, post_id, post_body):
+        # Displays dialog box confirming if a user wants to add a comment
         self.dialog = MDDialog(text=f'Story: {post_body}',
                                buttons=[
                                    MDRectangleFlatButton(
@@ -228,11 +245,13 @@ class ViewPtPostScreen(MDScreen):
         self.dialog.open()
 
     def add_pt_comment(self, post_id):
+        # Switches to PtCommentScreen
         self.dialog.dismiss()
         self.manager.get_screen('PtCommentScreen').post_id = post_id
         self.manager.current = "PtCommentScreen"
 
     def callback(self):
+        # Switches back to home page
         self.manager.transition.direction = "right"
         self.manager.current = "MenuScreen"
 

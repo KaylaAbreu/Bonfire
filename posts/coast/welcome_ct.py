@@ -6,10 +6,11 @@ from alerts.alerts import Alerts
 
 
 class WelcomeCtScreen(MDScreen):
-    # Get alert headline from Alerts() and display in pop up
     def on_enter(self):
+        # Get alert headline from Alerts() and display in pop up
         alert_headline = Alerts()
         alert_headline.alerts()
+
         self.dialog = MDDialog(
             title="Alert for the Coastal Region",
             text=alert_headline.headline3,
@@ -21,6 +22,7 @@ class WelcomeCtScreen(MDScreen):
         self.dialog.dismiss()
 
     def callback(self):
+        # Switches back to home page
         self.manager.transition.direction = "right"
         self.manager.current = "MenuScreen"
 

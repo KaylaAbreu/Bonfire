@@ -28,14 +28,15 @@ class Alerts():
                      'Perquimans;', 'Chowan;']
 
             alert = False
-            # Loop through mountains array and check to see if a mountain county is found in the 'areaDesc' of the JSON file
+
+            # Loop through mountains array and check to see if a mountain county is found in the 'areaDesc' of the JSON
             for county in mountains:
                 for i in response['features']:
                     area_desc = i['properties']['areaDesc']
                     if county in area_desc:
                         alert = True
-                        # self.headline1 = i['properties']['headline']  # brief warning
-                        # print(i['properties']['areaDesc'])          # county names
+                        # self.headline1 = i['properties']['headline']       # brief warning
+                        # print(i['properties']['areaDesc'])                 # county names
                         self.headline1 = i['properties']['description']      # What Where When Impact descriptions
                         break
                     else:
@@ -44,14 +45,14 @@ class Alerts():
             if not alert:
                 self.headline1 = "No Alerts at this Time"
 
-            # Loop through piedmont array and check to see if a piedmont county is found in the 'areaDesc' of the JSON file
+            # Loop through piedmont array and check to see if a piedmont county is found in the 'areaDesc' of the JSON
             for county in piedmont:
                 for i in response['features']:
                     area_desc = i['properties']['areaDesc']
                     if county in area_desc:
                         alert = True
-                        # self.headline2 = i['properties']['headline']  # brief warning
-                        # print(i['properties']['areaDesc'])          # county names
+                        # self.headline2 = i['properties']['headline']      # brief warning
+                        # print(i['properties']['areaDesc'])                # county names
                         self.headline2 = i['properties']['description']     # What Where When Impact descriptions
                         break
             if not alert:
@@ -65,11 +66,13 @@ class Alerts():
                         alert = True
                         # self.headline3 = i['properties']['headline']   # brief warning
                         # print(i['properties']['areaDesc'])             # county names
-                        # print(i['properties']['description'])
                         self.headline3 = i['properties']['description']  # What Where When Impact descriptions
                         break
 
             if not alert:
                 self.headline3 = "No Alerts at this Time"
         except requests.RequestException as e:
+            self.headline1="ERROR: There seems to be a bad connection. Please check back later."
+            self.headline2="ERROR: There seems to be a bad connection. Please check back later."
+            self.headline3="ERROR: There seems to be a bad connection. Please check back later."
             print(f'Error in API request: {e}')

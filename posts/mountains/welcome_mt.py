@@ -4,10 +4,11 @@ from kivymd.uix.screen import MDScreen
 from alerts.alerts import Alerts
 
 class WelcomeMtScreen(MDScreen):
-    # Get alert headline from Alerts() and display in pop up
     def on_enter(self):
+        # Get alert headline from Alerts() and display in pop up
         alert_headline = Alerts()
         alert_headline.alerts()
+
         self.dialog = MDDialog(
             title="Alert for the Mountain Region",
             text=alert_headline.headline1,
@@ -19,8 +20,10 @@ class WelcomeMtScreen(MDScreen):
         self.dialog.dismiss()
 
     def callback(self):
+        # Switches back to home page
         self.manager.transition.direction = "right"
         self.manager.current = "MenuScreen"
+
     def on_logout(self):
         # Switches to LoginScreen and erases any leftover content for username, password, and error text
         login_screen = self.manager.get_screen('LoginScreen')

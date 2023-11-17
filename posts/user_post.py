@@ -14,14 +14,17 @@ class UserPostScreen(MDScreen):
     def on_enter(self):
         app = MDApp.get_running_app()
 
+        # Get username from LoginScreen
         username = self.manager.get_screen('LoginScreen').current_user
 
         # Get stories from database
         if username == 'admin':
             self.title = "Delete Stories"
+
             # If the user is admin, get all posts without filtering by username
             sql_command = "SELECT * FROM posts"
             app.cursor.execute(sql_command)
+
             # Top Navigation Bar
             top_bar = (MDTopAppBar(title="User Stories",
                                    anchor_title="left",
@@ -50,6 +53,7 @@ class UserPostScreen(MDScreen):
             self.title = "My Stories"
             sql_command = "SELECT * FROM posts JOIN login ON posts.user_ID = login.user_ID WHERE login.username = %s"
             app.cursor.execute(sql_command, (username,))
+
             # Top Navigation Bar
             top_bar = (MDTopAppBar(title="My Stories",
                                    anchor_title="left",
@@ -76,9 +80,10 @@ class UserPostScreen(MDScreen):
 
         stories = app.cursor.fetchall()
 
+        # Scroll View
         scroll = MDScrollView(size_hint=(1, 0.547),
                               pos_hint={"top": 0.7})  # size_hint adjusts the container size of the scroll
-        #
+
         layout2 = MDBoxLayout(orientation='vertical', size_hint_y=None, spacing=20)
         layout2.bind(minimum_height=layout2.setter('height'))  # Needed to dynamically add/delete from scrollview
 
@@ -92,14 +97,11 @@ class UserPostScreen(MDScreen):
 
             if username == 'admin':
                 # If the user is admin, display a delete button for each post
-                # delete_button = MDIconButton(icon="delete")
-                # delete_button.bind(on_release=lambda instance, post=self.post_id: self.remove_story(post))
-                # delete_button.del_id = self.post_id
                 delete_button = MDIconButton(icon="delete",
                                              pos_hint={'center_x': 0.5, 'center_y': 0.5},
                                              on_release=lambda instance, post=self.post_id: self.remove_story(post))
                 delete_button.del_id = self.post_id
-                # self.ids.float.add_widget(delete_button)
+
                 ulist = ThreeLineListItem(
                     text=f'Story: {post_count}',
                     secondary_text=f'Username: {i[2]}',
@@ -116,6 +118,7 @@ class UserPostScreen(MDScreen):
                 ulist.post_id = self.post_id
                 layout3.add_widget(ulist)
                 layout3.add_widget(delete_button)
+
                 # post content
                 label = MDLabel(
                     text=self.post_content,
@@ -206,7 +209,6 @@ class UserPostScreen(MDScreen):
         self.manager.current = "UserPostScreen"
 
     def remove_story(self, post):
-
         # If yes button is pressed in dialog box, item will be deleted
         def yes(instance):
             app = MDApp.get_running_app()
@@ -215,7 +217,7 @@ class UserPostScreen(MDScreen):
             app.cursor.execute(sql_command, (post,))
             app.database.commit()
 
-            # remove ThreeLineListItem and Button
+            # Removes ThreeLineListItem and Buttons
             remove_container = []
             for widget in self.ids.float.children:
                 if hasattr(widget, 'post_id') and widget.post_id == post:
@@ -234,7 +236,6 @@ class UserPostScreen(MDScreen):
             self.manager.current = "UserPostScreen"
 
         # If cancel button is pressed in dialog box, dialog box will close with no change
-
         def cancel(instance):
             self.dialog.dismiss()
 
@@ -252,6 +253,7 @@ class UserPostScreen(MDScreen):
         self.dialog.open()
 
     def callback(self):
+        # Switches back to AdminScreen for admin and MenuScreen for regular users
         username = self.manager.get_screen('LoginScreen').current_user
         if username == 'admin':
             self.manager.transition.direction = "right"
@@ -259,6 +261,7 @@ class UserPostScreen(MDScreen):
         else:
             self.manager.transition.direction = "right"
             self.manager.current = "MenuScreen"
+
     def on_logout(self):
         # Switches to LoginScreen and erases any leftover content for username, password, and error text
         login_screen = self.manager.get_screen('LoginScreen')

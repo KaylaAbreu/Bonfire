@@ -7,6 +7,7 @@ class AddMtPostScreen(MDScreen):
     def mt_submit(self):
         app = MDApp.get_running_app()
 
+        # Gets username and user_ID from LoginScreen
         username = self.manager.get_screen('LoginScreen').current_user
         user_ID = self.manager.get_screen('LoginScreen').user_ID
 
@@ -32,11 +33,13 @@ class AddMtPostScreen(MDScreen):
 
             self.manager.current = 'ViewMtPostScreen'
         else:
+            # Displays error message
             dialog = MDDialog(text="Posts must be under 255 characters")
             dialog.open()
             self.manager.current = 'AddMtPostScreen'
 
     def callback(self):
+        # Clears input if there's leftover text
         post = self.manager.get_screen('AddMtPostScreen')
         post.ids.post_input.text = ""
         self.manager.transition.direction = "right"

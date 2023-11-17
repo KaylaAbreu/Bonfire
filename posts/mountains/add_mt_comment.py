@@ -8,9 +8,9 @@ class MtCommentScreen(MDScreen):
     def mt_comment_submit(self):
         app = MDApp.get_running_app()
 
+        # Gets username and user_ID from LoginScreen
         username = self.manager.get_screen('LoginScreen').current_user
         user_ID = self.manager.get_screen('LoginScreen').user_ID
-        # post_ID = self.manager.get_screen('ViewMtPostScreen').post_id
 
         # Check length of post
         if len(self.ids.post_input.text) == 0:
@@ -34,15 +34,18 @@ class MtCommentScreen(MDScreen):
 
             self.manager.current = 'ViewMtPostScreen'
         else:
+            # Displays error message
             dialog = MDDialog(text="Comments must be under 255 characters")
             dialog.open()
             self.manager.current = 'MtCommentScreen'
 
     def callback(self):
+        # Clears input from leftover text and switches to home page
         comment = self.manager.get_screen('MtCommentScreen')
         comment.ids.post_input.text = ""
         self.manager.transition.direction = "right"
         self.manager.current = "MenuScreen"
+
     def on_logout(self):
         # Switches to LoginScreen and erases any leftover content for username, password, and error text
         login_screen = self.manager.get_screen('LoginScreen')

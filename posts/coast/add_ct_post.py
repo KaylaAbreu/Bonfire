@@ -7,8 +7,9 @@ class AddCtPostScreen(MDScreen):
     def ct_submit(self):
         app = MDApp.get_running_app()
 
+        # Gets username and user_ID from LoginScreen
         username = self.manager.get_screen('LoginScreen').current_user
-        user_ID = self.manager.get_screen('LoginScreen').user_ID
+        user_id = self.manager.get_screen('LoginScreen').user_ID
 
         # Check length of post
         if len(self.ids.post_input.text) == 0:
@@ -19,7 +20,7 @@ class AddCtPostScreen(MDScreen):
         elif len(self.ids.post_input.text) < 255:
             # Add record to database
             sql_command = "INSERT INTO posts (user_ID, username, content, location) VALUES (%s, %s, %s, 'coast')"
-            values = (user_ID, username, self.ids.post_input.text,)
+            values = (user_id, username, self.ids.post_input.text,)
 
             # Execute command
             app.cursor.execute(sql_command, values)
@@ -32,6 +33,7 @@ class AddCtPostScreen(MDScreen):
 
             self.manager.current = 'ViewCtPostScreen'
         else:
+            # Displays error message
             dialog = MDDialog(text="Posts must be under 255 characters")
             dialog.open()
             self.manager.current = 'AddCtPostScreen'
@@ -39,6 +41,7 @@ class AddCtPostScreen(MDScreen):
 
 
     def callback(self):
+        # Clears input if there's leftover text
         post = self.manager.get_screen('AddCtPostScreen')
         post.ids.post_input.text = ""
         self.manager.transition.direction = "right"
