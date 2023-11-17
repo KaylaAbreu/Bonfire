@@ -13,12 +13,15 @@ from kivymd.uix.scrollview import MDScrollView
 class ConfirmDeleteUserDialog(BoxLayout):
     pass
 
+
 class ViewUsersScreen(Screen):
 
     def display_users(self, users):
+        # Clears user lists to prevent repeats
         user_list = self.ids.user_list
         user_list.clear_widgets()
 
+        # Displays each username along with delete button
         for index, user in enumerate(users, start=1):
             user_label = Label(
                 text=f"{index}. {user}",
@@ -33,14 +36,17 @@ class ViewUsersScreen(Screen):
                 size=('50dp', '40dp'),
                 on_release=lambda instance, user=user: self.show_confirmation_dialog(user)
             )
-
+            # Adds user_label and delete_button to user_list widget
             user_list.add_widget(user_label)
             user_list.add_widget(delete_button)
 
     def show_confirmation_dialog(self, user):
+        # Deletes user if admin selects 'yes' in dialog box
         def yes(instance):
+            # Accesses running Kivy app
             app = MDApp.get_running_app()
 
+            # SQL DELETE query to remove user from login table
             query = "DELETE FROM login WHERE username = %s"
             app.cursor.execute(query, (user,))
             app.database.commit()
@@ -57,6 +63,7 @@ class ViewUsersScreen(Screen):
         def cancel(instance):
             self.dialog.dismiss()
 
+        # Creates dialog box to confirm deletion of users
         self.dialog = MDDialog(
             text='Are you sure you want to delete this user?',
             type="custom",
@@ -71,10 +78,12 @@ class ViewUsersScreen(Screen):
         self.dialog.open()
 
     def on_back(self):
+        # Returns to AdminScreen
         self.manager.transition.direction = "left"
         self.manager.current = "AdminScreen"
 
     def on_logout(self):
+        # Switches to LoginScreen and erases any leftover content for username, password, and error text
         login_screen = self.manager.get_screen('LoginScreen')
         login_screen.ids.username.text = ""
         login_screen.ids.password.text = ""

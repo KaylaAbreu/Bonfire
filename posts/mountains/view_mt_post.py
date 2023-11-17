@@ -242,6 +242,7 @@ class ViewMtPostScreen(MDScreen):
         self.manager.current = "MenuScreen"
 
     def on_logout(self):
+        # Switches to LoginScreen and erases any leftover content for username, password, and error text
         login_screen = self.manager.get_screen('LoginScreen')
         login_screen.ids.username.text = ""
         login_screen.ids.password.text = ""
