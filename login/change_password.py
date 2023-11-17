@@ -1,6 +1,10 @@
 from kivymd.app import MDApp
 from kivymd.uix.screen import MDScreen
-
+import secrets
+import smtplib
+import string
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 class ChangePasswordScreen(MDScreen):
     def change_password(self, username, reset_code, new_password):
@@ -9,8 +13,8 @@ class ChangePasswordScreen(MDScreen):
             # Change the password
             self.change_user_password(username, new_password)
             self.manager.current = 'LoginScreen'
-        else:
-            self.ids.error_label.text = "Invalid reset code."
+        # else:
+        #     self.ids.error_label.text = "Invalid reset code."
 
     def verify_reset_code(self, username, reset_code):
         # Check if the provided reset code matches the one in the database
