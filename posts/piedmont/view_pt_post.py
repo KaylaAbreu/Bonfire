@@ -134,7 +134,7 @@ class ViewPtPostScreen(MDScreen):
                 com_user = c[3]
                 com_body = c[4]
 
-                header2 = OneLineRightIconListItem(ImageRightWidget(source="img.png"),
+                header2 = OneLineRightIconListItem(ImageRightWidget(source="posts/img.png"),
                                                    text=com_user,
                                                    bg_color=(248 / 255, 143 / 255, 70 / 255, 0.5))
 
