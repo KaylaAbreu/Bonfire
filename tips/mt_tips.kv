@@ -1,0 +1,85 @@
+<MountainTips>:
+
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+
+        MDTopAppBar:
+            title: "Mountain Adventure Tips"
+            anchor_title: "left"
+            left_action_items: [["home", lambda x: root.callback()]]
+            right_action_items: [["logout", lambda x: root.on_logout()]]
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1
+        MDFloatLayout:
+
+
+        MDScrollView:
+            pos_hint: {"top": 0.7}
+
+            MDList:
+                id: mountain_tips_container
+
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .155, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "All Tips"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "AllTips"
+
+    MDRaisedButton:
+        pos_hint: {"center_x": .385, "center_y": .75}
+        size: (.5, .5)
+        font_size:14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Mountain"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255) #2nd darkest orange color
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "MountainTips"
+    MDRaisedButton:
+        pos_hint: {"center_x": .63, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Piedmont"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "PiedmontTips"
+    MDRaisedButton:
+        pos_hint: {"center_x": .85, "center_y": .75}
+        size: (.5, .5)
+        font_size: 14
+        #text_color: (255/255, 235/255, 228/255)
+        text_color: (58/255,18/255, 7/255)
+        text: "Coast"
+        #md_bg_color: 0.996, 0.365, 0.149 #Orange
+        md_bg_color: (248/255, 143/255, 79/255)
+        #md_bg_color: (58/255,18/255, 7/255)
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = "CoastTips"

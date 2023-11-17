@@ -1,0 +1,104 @@
+<LoginScreen>:
+    MDFloatLayout:
+        md_bg_color: 0.996, 0.365, 0.149, 1  # Orange color in RGBA format
+        Image:
+            source: "login/logo.png"
+            pos_hint: {"center_x": .5, "center_y": .70}
+            size_hint: .5, .5
+
+        MDFloatLayout:
+            size_hint: .9 , .07
+            pos_hint: {"center_x": .5, "center_y": .50}
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [4]
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1
+                Line:
+                    width:1.1
+                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+            TextInput:
+                id:username
+                hint_text: "Username"
+                size_hint: 1, None
+                pos_hint: {"center_x": .5, "center_y": .5}
+                height: self.minimum_height
+                background_color: 1, 1, 1, 0
+                font_size: "14sp"
+                hint_text_color: 170/255, 170/255, 170/255, 1
+                padding: 13
+                cursor_color: 0, 0, 0, 1
+
+        MDFloatLayout:
+            size_hint: .9 , .07
+            pos_hint: {"center_x": .5, "center_y": .41}
+            canvas:
+                Color:
+                    rgb: 250/255, 250/255, 250/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [4]
+            canvas.before:
+                Color:
+                    rgb: 217/255, 217/255, 217/255, 1
+                Line:
+                    width:1.1
+                    rounded_rectangle: self.x, self.y, self.width, self.height, 4, 4, 4, 4,100
+            TextInput:
+                id:password
+                hint_text: "Password"
+                size_hint: 1, None
+                pos_hint: {"center_x": .5, "center_y": .5}
+                height: self.minimum_height
+                background_color: 1, 1, 1, 0
+                font_size: "14sp"
+                password: True
+                hint_text_color: 170/255, 170/255, 170/255, 1
+                padding: 13
+                cursor_color: 0, 0, 0, 1
+
+            Button:
+                text: "Login"
+                size_hint: 1, 0.9
+                pos_hint: {"center_x": 0.5, "center_y": -0.70}
+                background_color: 128/255, 128/255, 128/255, 1
+                font_size: "15sp"
+                on_release: root.on_login(username,password)
+                canvas.before:
+                    Color:
+                        rgb: 154/255, 203/255, 247/255, 1
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+                        radius: [4]
+
+            MDTextButton:
+                text: "Sign Up"
+                pos_hint:{"center_x":0.5, "center_y": -4.0}
+                font_size: "13sp"
+                on_release: root.on_signup()
+
+            MDTextButton:
+                text: "Forgot Password"
+                pos_hint:{"center_x":0.5, "center_y": -4.6}
+                font_size: "13sp"
+                on_release: root.on_forgotPassword()
+
+        MDLabel:
+            id: error_label
+            text: " "
+            size_hint: None, None
+            size: "250sp" , "30sp" # Adjust the size as needed
+            pos_hint: {"center_x": 0.5, "center_y": 0.4}
+            text_size: self.size
+            halign: "center"
+            valign: "middle"
+            markup: True
+            font_size: "13sp"
+            theme_text_color: "Error"

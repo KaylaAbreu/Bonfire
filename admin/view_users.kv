@@ -1,0 +1,27 @@
+<ViewUsersScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "User List"
+            anchor_title: "left"
+            left_action_items: [["home", lambda x: root.on_back()]]
+            right_action_items: [["logout", lambda x: root.on_logout()]]
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+
+        MDFloatLayout:
+            md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+            canvas:
+                Color:
+                    rgb: 248/255, 143/255, 70/255, 1
+            canvas.before:
+                Color:
+                    rgb: 248/255, 143/255, 70/255, 1
+
+
+            GridLayout:
+                id: user_list
+                cols: 2
+                spacing: dp(15)
+                background_color: 250/255, 237/255, 202/255, 1

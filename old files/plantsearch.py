@@ -1,5 +1,4 @@
 import time
-
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
@@ -960,7 +959,7 @@ class PlantSearch(Screen):
         # Save the flipped image
         vertical_img.save(image_path)
 
-        #self.plant_search(image_path)
+        #self.plants(image_path)
 
     def plant_search(self, image_path):
         with open(image_path, "rb") as file:

@@ -3,7 +3,7 @@ import base64
 import API_key
 
 def plant_search():
-    with open("poison_ivy.jpg", "rb") as file:
+    with open("../poison_ivy.jpg", "rb") as file:
         images = [base64.b64encode(file.read()).decode("ascii")]
 
     response = requests.post("https://api.plant.id/v2/identify",

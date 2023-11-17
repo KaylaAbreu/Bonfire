@@ -1,0 +1,42 @@
+<WelcomeMtScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Mountain Bonfire"
+            anchor_title: "left"
+            left_action_items: [["home", lambda x: root.callback()]]
+            right_action_items: [["logout", lambda x: root.on_logout()]]
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 70/255, 1 #light orange
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+            Image:
+                source: "posts/mountains/mountain.png"
+                pos_hint: {"center_x": .5, "center_y": .777}
+                size_hint: 1, .7
+                canvas:
+                    Color:
+                        rgb: 250/255, 250/255, 250/255, 1
+                canvas.before:
+                    Color:
+                        rgb: 217/255, 217/255, 217/255, 1
+
+            MDRaisedButton:
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                size_hint: .6, .07
+                pos_hint: {"center_x": .5, "center_y": .4}
+                text: "Mountain Bonfire Stories"
+                text_color: 44/255, 44/255, 4/255, 1 #gray
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "ViewMtPostScreen"
+            MDRaisedButton:
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                size_hint: .6, .07
+                pos_hint: {"center_x": .5, "center_y": .2}
+                text: "Mountain Adventure Tips"
+                text_color: 44/255, 44/255, 4/255, 1 #gray
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "MountainTips"

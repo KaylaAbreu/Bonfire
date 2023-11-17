@@ -1,0 +1,49 @@
+<AddMtPostScreen>:
+    MDBoxLayout:
+        md_bg_color: 250/255, 237/255, 202/255, 1  # off white color in RGBA format
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Mountain Bonfire"
+            anchor_title: "left"
+            left_action_items: [["home", lambda x: root.callback()]]
+            right_action_items: [["logout", lambda x: root.on_logout()]]
+            elevation: 1
+            md_bg_color: 248/255, 143/255, 79/255, 1  # light Orange color in RGBA format
+            specific_text_color: 44/255, 44/255, 44/255, 1 #gray
+        MDFloatLayout:
+            Image:
+                source: "posts/logo2.png"
+                pos_hint: {"center_x": .5, "center_y": .85}
+                size_hint: None, None
+                width: 200
+                height: 200
+                padding: 10
+            MDLabel:
+                id: post_label
+                pos_hint: {"center_x": .5, "center_y": .8}
+            TextInput:
+                id: post_input
+                hint_text: "Share your story around the Bonfire"
+                multiline: True
+                size_hint_y: None
+                height: 400
+                pos_hint: {"center_x": .5, "center_y": .45}
+                font_size: "19sp"
+                #hint_text_color: 170/255, 170/255, 170/255, 1
+                cursor_color: 0,0,0,1
+                #hint_text_color: 0.5, 0.5, 0.5, 1  # Set the hint text color to a dark gray
+
+            #MDLabel:
+            #    pos_hint: {"center_x": 1.1, "center_y": -.15}
+            #    text: "[ Upload photo ]"
+            #   font_size: 19
+            MDRaisedButton:
+                pos_hint: {"center_x": .5, "center_y": .1}
+                size: (1, .5)
+                font_size: 32
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                text_color: 44/255, 44/255, 44/255, 1 #gray
+                text: "Add Story"
+                on_press:
+                    root.mt_submit()
