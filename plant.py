@@ -137,7 +137,7 @@ class PlantSearch(MDScreen):
         float_layout.add_widget(scroll_view)
         float_layout.add_widget(dismiss_button)
 
-        self.fulltip = Popup(title="Your plant", content=float_layout, size=(Window.width - 10, Window.height - 10),
+        self.fulltip = Popup(title="Your plant might be", content=float_layout, size=(Window.width - 10, Window.height - 10),
                              auto_dismiss=True)
         self.fulltip.open()
 
