@@ -21,7 +21,7 @@
             MDRaisedButton:
                 md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
                 size_hint: .6, .07
-                pos_hint: {"center_x": .5, "center_y": .7}
+                pos_hint: {"center_x": .5, "center_y": .8}
                 text: "Mountain Bonfire"
                 text_color: 44/255, 44/255, 4/255, 1 #gray
                 on_release:
@@ -31,7 +31,7 @@
             MDRaisedButton:
                 md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
                 size_hint: .6, .07
-                pos_hint: {"center_x": .5, "center_y": .5}
+                pos_hint: {"center_x": .5, "center_y": .65}
                 text: "Piedmont Bonfire"
                 text_color: 44/255, 44/255, 44/255, 1 #gray
 
@@ -42,7 +42,7 @@
             MDRaisedButton:
                 md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
                 size_hint: .6, .07
-                pos_hint: {"center_x": .5, "center_y": .3}
+                pos_hint: {"center_x": .5, "center_y": .5}
                 text: "Coastal Bonfire"
                 text_color: 44/255, 44/255, 44/255, 1 #gray
 
@@ -53,9 +53,18 @@
             MDRaisedButton:
                 md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
                 size_hint: .6, .07
-                pos_hint: {"center_x": .5, "center_y": .1}
+                pos_hint: {"center_x": .5, "center_y": .35}
                 text: "My Stories"
                 text_color: 44/255, 44/255, 44/255, 1
                 on_release:
                     root.manager.transition.direction = "left"
                     root.manager.current = "UserPostScreen"
+            MDRaisedButton:
+                md_bg_color: 248/255, 143/255, 79/255, 1 #light orange
+                size_hint: .6, .07
+                pos_hint: {"center_x": .5, "center_y": .1}
+                text: "My Comments"
+                text_color: 44/255, 44/255, 44/255, 1
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "UserComScreen"

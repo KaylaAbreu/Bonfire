@@ -23,6 +23,7 @@ from admin.view_users import ViewUsersScreen
 from success import SuccessScreen
 from menu_screen import MenuScreen
 from posts.user_post import UserPostScreen
+from posts.user_com import UserComScreen
 from tips.all_tips import AllTips
 from tips.mt_tips import MountainTips
 from tips.pt_tips import PiedmontTips
@@ -62,6 +63,7 @@ class Bonfire(MDApp):
         Builder.load_file("posts/piedmont/welcome_pt.kv")
         Builder.load_file("posts/coast/welcome_ct.kv")
         Builder.load_file("posts/user_post.kv")
+        Builder.load_file("posts/user_com.kv")
         Builder.load_file("login/login.kv")
         Builder.load_file("login/signup.kv")
         Builder.load_file("login/forgot_password.kv")

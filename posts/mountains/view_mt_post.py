@@ -47,8 +47,8 @@ class ViewMtPostScreen(MDScreen):
         scroll = MDScrollView(size_hint=(1, 0.547),
                               pos_hint={"top": 0.7})  # size_hint adjusts the container size of the scroll
 
-        layout2 = MDBoxLayout(orientation='vertical', size_hint_y=None, spacing=20)
-        layout2.bind(minimum_height=layout2.setter('height'))  # Needed to dynamically add/delete from scrollview
+        total_layout = MDBoxLayout(orientation='vertical', size_hint_y=None, spacing=20)
+        total_layout.bind(minimum_height=total_layout.setter('height'))  # Needed to dynamically add/delete from scrollview
 
         # Prevent repeats
         self.ids.float.clear_widgets()
@@ -62,12 +62,12 @@ class ViewMtPostScreen(MDScreen):
             dislike_counter = self.get_dislike_count(post_id)
 
             # Display user icon and username
-            header = OneLineAvatarListItem(ImageLeftWidget(source="posts/img.png"),
+            story_header = OneLineAvatarListItem(ImageLeftWidget(source="posts/img.png"),
                                                text=post_user,
                                                bg_color=(248 / 255, 143 / 255, 70 / 255, 1),
                                            )
             # post content
-            label = MDLabel(
+            story_label = MDLabel(
                 text=post_body,
                 color=(0, 0, 0, 1),
                 size_hint_y=None,
@@ -109,23 +109,23 @@ class ViewMtPostScreen(MDScreen):
             dislike = MDIconButton(icon="thumb-down",
                                    on_release=lambda instance, post=post_id, label=self.dislike_label: self.dislike(post, label))
 
-            layout = MDFloatLayout()
-            layout1 = MDBoxLayout(orientation="horizontal", size_hint_y=None, spacing=0.5,
+            like_layout = MDFloatLayout()
+            story_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, spacing=0.5,
                                   md_bg_color=(248 / 255, 143 / 255, 70 / 255, 1),
-                                  height=header.height
+                                  height=story_header.height
                                   )
-            layout1.add_widget(header)
-            layout1.add_widget(like)
-            layout1.add_widget(dislike)
+            story_layout.add_widget(story_header)
+            story_layout.add_widget(like)
+            story_layout.add_widget(dislike)
 
-            layout.add_widget(self.like_label)
-            layout.add_widget(self.dislike_label)
+            like_layout.add_widget(self.like_label)
+            like_layout.add_widget(self.dislike_label)
 
             com_app.cursor.execute("SELECT * FROM comments WHERE post_ID = %s", (post_id,))
             comments = com_app.cursor.fetchall()
 
-            layout3 = MDBoxLayout(orientation='vertical', size_hint_y=None)
-            layout3.bind(minimum_height=layout3.setter('height'))
+            com_layout = MDBoxLayout(orientation='vertical', size_hint_y=None)
+            com_layout.bind(minimum_height=com_layout.setter('height'))
 
             # Lists comments to a post underneath the post
             for c in comments:
@@ -133,11 +133,11 @@ class ViewMtPostScreen(MDScreen):
                 com_user = c[3]
                 com_body = c[4]
 
-                header2 = OneLineRightIconListItem(ImageRightWidget(source="posts/img.png"),
+                com_header = OneLineRightIconListItem(ImageRightWidget(source="posts/img.png"),
                                                    text=com_user,
                                                    bg_color=(248 / 255, 143 / 255, 70 / 255, 0.5))
 
-                label2 = MDLabel(
+                com_label = MDLabel(
                     text=com_body,
                     size_hint_y=None,
                     color=(0, 0, 0, 1),
@@ -148,16 +148,16 @@ class ViewMtPostScreen(MDScreen):
                     valign="top"
                 )
 
-                layout3.add_widget(header2)
-                layout3.add_widget(label2)
-            layout2.add_widget(layout1)
-            layout2.add_widget(layout)
+                com_layout.add_widget(com_header)
+                com_layout.add_widget(com_label)
+            total_layout.add_widget(story_layout)
+            total_layout.add_widget(like_layout)
 
-            layout2.add_widget(label)
-            layout2.add_widget(comment_btn)
-            layout2.add_widget(layout3)
+            total_layout.add_widget(story_label)
+            total_layout.add_widget(comment_btn)
+            total_layout.add_widget(com_layout)
 
-        scroll.add_widget(layout2)
+        scroll.add_widget(total_layout)
 
         add_btn = MDRectangleFlatButton(md_bg_color=(248 / 255, 143 / 255, 70 / 255, 1),
                                         text="Share your story",
