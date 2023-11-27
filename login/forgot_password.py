@@ -9,7 +9,10 @@ from kivymd.uix.screen import MDScreen
 
 class ForgotPasswordScreen(MDScreen):
     def on_login(self):
-
+        login_screen = self.manager.get_screen('LoginScreen')
+        login_screen.ids.username.text = ""
+        login_screen.ids.password.text = ""
+        login_screen.ids.error_label.text = ""
         self.manager.current = 'LoginScreen'
 
     def store_reset_code(self, username, reset_code):

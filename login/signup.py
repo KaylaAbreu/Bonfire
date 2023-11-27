@@ -26,7 +26,10 @@ class SignupScreen(MDScreen):
                     f"INSERT INTO login (username, password, email) VALUES ('{username.text}', '{password.text}', '{email.text}')")
                 app.database.commit()
                 print(f"User {username.text} registered")
-
+                login_screen = self.manager.get_screen('LoginScreen')
+                login_screen.ids.username.text = ""
+                login_screen.ids.password.text = ""
+                login_screen.ids.error_label.text = ""
                 self.manager.current = 'LoginScreen'
 
     def check_username_exists(self, username):

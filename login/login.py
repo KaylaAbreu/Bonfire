@@ -21,7 +21,6 @@ class LoginScreen(MDScreen):
             else:
                 self.manager.current = 'MenuScreen'
         else:
-
             self.ids.error_label.text = "Invalid username or password"
 
     def check_credentials(self, username, password):
